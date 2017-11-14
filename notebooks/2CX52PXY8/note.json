@@ -1,0 +1,759 @@
+{
+  "paragraphs": [
+    {
+      "title": "1 - Markdown",
+      "text": "%md \n# Apache Zeppelin + Apache Spark + Apache Cassandra\n\nThis is a demonstration showing how to use [Apache Zeppelin notebook](https://zeppelin.incubator.apache.org/) to interact with [Apache Cassandra](http://cassandra.apache.org/) NoSQL database through [Apache Spark](http://spark.apache.org/) or directly through Cassandra CQL language.\n\n*Please note this is an unofficial demo and tutorial.*\n\n### Apache Spark\n\nApache Spark is a fast and general engine for big data processing, with built-in modules for streaming, SQL, machine learning and graph processing.\nMore details can be found here [http://spark.apache.org](http://spark.apache.org/).\nIt is  used for Cassandra data processing needs (ETL, transformations, analytics ...).\n\n### DataStax Spark Cassandra Connector\n\n[DataStax](http://www.datatstax.com) have developped a Spark Cassandra Connector to be able to read and write Cassandra data from Spark API. \nThe Spark Cassandra Connector lets you expose Cassandra tables as Spark RDDs (or DataFrames), write Spark RDDs (or DataFrames) to Cassandra tables, and execute arbitrary SQL queries from your Spark applications.\n\nUseful links:\n* [The Spark Cassandra Connector github repository](https://github.com/datastax/spark-cassandra-connector)\n* [Getting started with Apache Spark and Cassandra](https://academy.datastax.com/fr/demos/getting-started-apache-spark-and-cassandra)\n* [Free training on DataStax Enterprise Analytics with Apache Spark](https://academy.datastax.com/fr/courses/getting-started-apache-spark)\n\n### CQL Language\n\nThe Cassandra Query Language (CQL) is the primary language for communicating with the Cassandra database.\nDocumentation on CQL usage:\n* [Introduction to CQL](http://docs.datastax.com/en/cql/3.3/cql/cqlIntro.html)\n* [Using CQL](https://docs.datastax.com/en/cql/3.3/cql/cql_using/useAboutCQL.html)\n\nThe Cassandra CQL Interpreter for Apache Zeppelin is written by my colleague Duy Hai Doan  [@doanduyhai](https://twitter.com/doanduyhai)\n[CQL Interpreter documentation for Apache Zeppelin 0.5.5](https://zeppelin.incubator.apache.org/docs/0.5.5-incubating/interpreter/cassandra.html)\n\n\n",
+      "user": "anonymous",
+      "dateUpdated": "Nov 10, 2017 3:54:12 PM",
+      "config": {
+        "tableHide": false,
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "title": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "results": {},
+        "editorSetting": {}
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch1\u003eApache Zeppelin + Apache Spark + Apache Cassandra\u003c/h1\u003e\n\u003cp\u003eThis is a demonstration showing how to use \u003ca href\u003d\"https://zeppelin.incubator.apache.org/\"\u003eApache Zeppelin notebook\u003c/a\u003e to interact with \u003ca href\u003d\"http://cassandra.apache.org/\"\u003eApache Cassandra\u003c/a\u003e NoSQL database through \u003ca href\u003d\"http://spark.apache.org/\"\u003eApache Spark\u003c/a\u003e or directly through Cassandra CQL language.\u003c/p\u003e\n\u003cp\u003e\u003cem\u003ePlease note this is an unofficial demo and tutorial.\u003c/em\u003e\u003c/p\u003e\n\u003ch3\u003eApache Spark\u003c/h3\u003e\n\u003cp\u003eApache Spark is a fast and general engine for big data processing, with built-in modules for streaming, SQL, machine learning and graph processing.\u003cbr/\u003eMore details can be found here \u003ca href\u003d\"http://spark.apache.org/\"\u003ehttp://spark.apache.org\u003c/a\u003e.\u003cbr/\u003eIt is used for Cassandra data processing needs (ETL, transformations, analytics \u0026hellip;).\u003c/p\u003e\n\u003ch3\u003eDataStax Spark Cassandra Connector\u003c/h3\u003e\n\u003cp\u003e\u003ca href\u003d\"http://www.datatstax.com\"\u003eDataStax\u003c/a\u003e have developped a Spark Cassandra Connector to be able to read and write Cassandra data from Spark API.\u003cbr/\u003eThe Spark Cassandra Connector lets you expose Cassandra tables as Spark RDDs (or DataFrames), write Spark RDDs (or DataFrames) to Cassandra tables, and execute arbitrary SQL queries from your Spark applications.\u003c/p\u003e\n\u003cp\u003eUseful links:\u003cbr/\u003e* \u003ca href\u003d\"https://github.com/datastax/spark-cassandra-connector\"\u003eThe Spark Cassandra Connector github repository\u003c/a\u003e\u003cbr/\u003e* \u003ca href\u003d\"https://academy.datastax.com/fr/demos/getting-started-apache-spark-and-cassandra\"\u003eGetting started with Apache Spark and Cassandra\u003c/a\u003e\u003cbr/\u003e* \u003ca href\u003d\"https://academy.datastax.com/fr/courses/getting-started-apache-spark\"\u003eFree training on DataStax Enterprise Analytics with Apache Spark\u003c/a\u003e\u003c/p\u003e\n\u003ch3\u003eCQL Language\u003c/h3\u003e\n\u003cp\u003eThe Cassandra Query Language (CQL) is the primary language for communicating with the Cassandra database.\u003cbr/\u003eDocumentation on CQL usage:\u003cbr/\u003e* \u003ca href\u003d\"http://docs.datastax.com/en/cql/3.3/cql/cqlIntro.html\"\u003eIntroduction to CQL\u003c/a\u003e\u003cbr/\u003e* \u003ca href\u003d\"https://docs.datastax.com/en/cql/3.3/cql/cql_using/useAboutCQL.html\"\u003eUsing CQL\u003c/a\u003e\u003c/p\u003e\n\u003cp\u003eThe Cassandra CQL Interpreter for Apache Zeppelin is written by my colleague Duy Hai Doan \u003ca href\u003d\"https://twitter.com/doanduyhai\"\u003e@doanduyhai\u003c/a\u003e\u003cbr/\u003e\u003ca href\u003d\"https://zeppelin.incubator.apache.org/docs/0.5.5-incubating/interpreter/cassandra.html\"\u003eCQL Interpreter documentation for Apache Zeppelin 0.5.5\u003c/a\u003e\u003c/p\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1510325910120_-408471178",
+      "id": "20160113-181412_1813689583",
+      "dateCreated": "Nov 10, 2017 2:58:30 PM",
+      "dateStarted": "Nov 10, 2017 3:54:12 PM",
+      "dateFinished": "Nov 10, 2017 3:54:13 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "2 - Shell command example",
+      "text": "%sh pwd\nls -l",
+      "dateUpdated": "Nov 10, 2017 3:54:41 PM",
+      "config": {
+        "tableHide": false,
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sh",
+        "editorHide": false,
+        "title": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "results": {},
+        "editorSetting": {}
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1510325910121_-408855926",
+      "id": "20160113-181412_1623555306",
+      "dateCreated": "Nov 10, 2017 2:58:30 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "3 - Add Spark library to read CSV files",
+      "text": "%dep\n\nz.reset()\n\n// Add spark-csv package\n// Versions and documentation on https://github.com/databricks/spark-csv\nz.load(\"com.databricks:spark-csv_2.11:1.3.0\")",
+      "dateUpdated": "Nov 10, 2017 2:58:38 PM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "editorHide": true,
+        "title": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "results": {},
+        "editorSetting": {}
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1510325910121_-408855926",
+      "id": "20160113-181412_342563478",
+      "dateCreated": "Nov 10, 2017 2:58:30 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "4 - download demo CSV file",
+      "text": "%sh\n\n#wget https://raw.githubusercontent.com/victorcouste/zeppelin-spark-cassandra-demo/master/albums.csv\n\n# Or download direclty the demo CSV file from https://raw.githubusercontent.com/victorcouste/zeppelin-spark-cassandra-demo/master/albums.csv",
+      "dateUpdated": "Nov 10, 2017 2:58:41 PM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sh",
+        "editorHide": false,
+        "title": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "results": {},
+        "editorSetting": {}
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1510325910121_-408855926",
+      "id": "20160123-165554_1618215392",
+      "dateCreated": "Nov 10, 2017 2:58:30 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sh\n",
+      "user": "anonymous",
+      "dateUpdated": "Nov 10, 2017 2:58:38 PM",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1510325918543_844286565",
+      "id": "20171110-145838_1901340451",
+      "dateCreated": "Nov 10, 2017 2:58:38 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "4 - Spark :  load cSV File in dataFrame",
+      "text": "%spark\n\n//Display Spark version used\nprintln(\"Spark version:\"+sc.version)\n\nval df_albums \u003d sqlContext.read\n.format(\"com.databricks.spark.csv\")\n.option(\"header\", \"true\")\n.load(\"albums.csv\")\n.cache\n\n//If you want to store albums.csv in a specific folder run\n//val df_albums \u003d sqlContext.read\n//.format(\"com.databricks.spark.csv\")\n//.option(\"header\", \"true\")\n//.load(\"/your_path/albums.csv\")\n//.cache",
+      "dateUpdated": "Nov 10, 2017 2:58:30 PM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "editorHide": true,
+        "title": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1510325910121_-408855926",
+      "id": "20160113-181412_829518708",
+      "dateCreated": "Nov 10, 2017 2:58:30 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "5 - Spark : Print Schema, Show, Filter, GroupBy dataFrame",
+      "text": "df_albums.printSchema()\ndf_albums.show()\ndf_albums.filter(\"year \u003e 2000\").show()\ndf_albums.groupBy(\"year\").count().show()",
+      "dateUpdated": "Nov 10, 2017 2:58:30 PM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "editorHide": true,
+        "title": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1510325910121_-408855926",
+      "id": "20160114-180933_599744065",
+      "dateCreated": "Nov 10, 2017 2:58:30 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "6 - SparkSQL on DataFrame 1",
+      "text": "df_albums.registerTempTable(\"spark_albums_table\")\n\nsqlContext.sql(\"SELECT * FROM spark_albums_table\").show",
+      "dateUpdated": "Nov 10, 2017 2:58:30 PM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "editorHide": true,
+        "title": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1510325910121_-408855926",
+      "id": "20160114-002321_1001583714",
+      "dateCreated": "Nov 10, 2017 2:58:30 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "7 - SparkSQL On DataFrame  2",
+      "text": "%sql\nSELECT country,count(*) as nb FROM spark_albums_table group by country",
+      "dateUpdated": "Nov 10, 2017 2:58:30 PM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "editorHide": true,
+        "title": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [
+            {
+              "name": "nb",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "yAxis": {
+              "name": "nb",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1510325910121_-408855926",
+      "id": "20160114-002054_842505952",
+      "dateCreated": "Nov 10, 2017 2:58:30 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "8 - Cassandra CQL : Create keyspace, help and describe keyspaces",
+      "text": "%cassandra\n\nCREATE KEYSPACE IF NOT EXISTS ks_music \nWITH replication \u003d {\n\t\u0027class\u0027 : \u0027SimpleStrategy\u0027,\n\t\u0027replication_factor\u0027 : 1\n};\n\n//help;\n\n//describe keyspaces;\n\n//describe keyspace ks_music;",
+      "dateUpdated": "Nov 10, 2017 3:54:46 PM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "title": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "results": {},
+        "editorSetting": {}
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1510325910121_-408855926",
+      "id": "20160119-181849_56311459",
+      "dateCreated": "Nov 10, 2017 2:58:30 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "9 - Cassandra CQL : Tables creation",
+      "text": "%cassandra\n\nuse ks_music;\n\nDROP TABLE albums;\n\nCREATE TABLE IF NOT EXISTS albums ( \n\tartist text,\n\talbum text,\n\tyear text,\n\tcountry text,\n\tquality text,\n\tstatus text,\n\tPRIMARY KEY (album) \n);\n\nDROP TABLE nbalbums_by_year;\n\nCREATE TABLE IF NOT EXISTS nbalbums_by_year ( \n\tyear text,\n    nbalbums int,\n\tPRIMARY KEY (year)\n);\n\ndescribe table albums;",
+      "dateUpdated": "Nov 10, 2017 3:54:52 PM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "title": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "results": {},
+        "editorSetting": {}
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1510325910121_-408855926",
+      "id": "20160113-181412_1134300065",
+      "dateCreated": "Nov 10, 2017 2:58:30 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "10 - Cassandra CQL",
+      "text": "%cassandra\nselect * from ks_music.albums limit 10;",
+      "dateUpdated": "Nov 10, 2017 3:54:51 PM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "title": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "results": {},
+        "editorSetting": {}
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1510325910122_-407701680",
+      "id": "20160123-172739_1656103366",
+      "dateCreated": "Nov 10, 2017 2:58:30 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "11 - Write Spark DataFrame in Cassandra 1",
+      "text": "df_albums.write\n.format(\"org.apache.spark.sql.cassandra\")\n.option(\"header\",\"false\")\n.mode(\"append\")\n.options(Map( \"table\" -\u003e \"albums\", \"keyspace\" -\u003e \"ks_music\"))\n.save()",
+      "dateUpdated": "Nov 10, 2017 3:54:25 PM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "title": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "results": {},
+        "editorSetting": {}
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1510325910122_-407701680",
+      "id": "20160114-001131_987960956",
+      "dateCreated": "Nov 10, 2017 2:58:30 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "12 - CQL Cassandra query",
+      "text": "%cassandra\nselect * from ks_music.albums limit 10;",
+      "dateUpdated": "Nov 10, 2017 3:54:30 PM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "title": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "album",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "artist",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "album",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "artist",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "enabled": true,
+        "results": {},
+        "editorSetting": {}
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1510325910122_-407701680",
+      "id": "20160123-172148_256698728",
+      "dateCreated": "Nov 10, 2017 2:58:30 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "13 - Write Spark DataFrame In Cassandra 2",
+      "text": "\nval df_nbalbyms_by_year \u003d sqlContext.sql(\"SELECT year,count(*) as nbalbums FROM spark_albums_table group by year\")\n\ndf_nbalbyms_by_year.show\n\ndf_nbalbyms_by_year.write\n.format(\"org.apache.spark.sql.cassandra\")\n.option(\"header\",\"false\")\n.mode(\"overwrite\")\n.options(Map( \"table\" -\u003e \"nbalbums_by_year\", \"keyspace\" -\u003e \"ks_music\"))\n.save()",
+      "dateUpdated": "Nov 10, 2017 3:54:57 PM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "title": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "results": {},
+        "editorSetting": {}
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1510325910122_-407701680",
+      "id": "20160114-000651_1120689629",
+      "dateCreated": "Nov 10, 2017 2:58:30 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "14 - Cassandra CQL query",
+      "text": "%cassandra\nselect * from ks_music.nbalbums_by_year;",
+      "dateUpdated": "Nov 10, 2017 2:58:30 PM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "editorHide": true,
+        "title": true,
+        "graph": {
+          "mode": "multiBarChart",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "year",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "nbalbums",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "year",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1510325910122_-407701680",
+      "id": "20160114-001159_1878746586",
+      "dateCreated": "Nov 10, 2017 2:58:30 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "15 - Spark DataFrame from Cassandra Table",
+      "text": "val df_albums_cassandra \u003d sqlContext\n  .read\n  .format(\"org.apache.spark.sql.cassandra\")\n  .options(Map( \"table\" -\u003e \"albums\", \"keyspace\" -\u003e \"ks_music\" ))\n  .load()\n  \ndf_albums_cassandra.show\n",
+      "dateUpdated": "Nov 10, 2017 2:58:30 PM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "editorHide": true,
+        "title": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1510325910122_-407701680",
+      "id": "20160113-182535_1195558506",
+      "dateCreated": "Nov 10, 2017 2:58:30 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "16 - SparkSQL table from Cassandra table",
+      "text": "%sql\nCREATE TEMPORARY TABLE table_albums\nUSING org.apache.spark.sql.cassandra\nOPTIONS ( cluster \"Test Cluster\", keyspace \"ks_music\", table \"albums\", pushdown \"true\")",
+      "dateUpdated": "Nov 10, 2017 2:58:30 PM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "editorHide": true,
+        "title": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "null",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "null",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1510325910122_-407701680",
+      "id": "20160114-002507_1756327366",
+      "dateCreated": "Nov 10, 2017 2:58:30 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "17 - SparkSQL query on Cassandra Data",
+      "text": "%sql\nselect country, count(*) as count from table_albums group by country having count\u003e${albumCountThreshold\u003d1000} order by count",
+      "dateUpdated": "Nov 10, 2017 2:58:30 PM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/sql",
+        "editorHide": true,
+        "title": true,
+        "graph": {
+          "mode": "multiBarChart",
+          "height": 196.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "country",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "nb",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "country",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "nb",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {
+          "albumCountThreshold": "1500"
+        },
+        "forms": {
+          "albumCountThreshold": {
+            "name": "albumCountThreshold",
+            "defaultValue": "1000",
+            "hidden": false
+          }
+        }
+      },
+      "apps": [],
+      "jobName": "paragraph_1510325910122_-407701680",
+      "id": "20160114-181331_1246292720",
+      "dateCreated": "Nov 10, 2017 2:58:30 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "Nov 10, 2017 2:58:30 PM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "editorHide": true,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1510325910123_-408086429",
+      "id": "20160114-093455_823181330",
+      "dateCreated": "Nov 10, 2017 2:58:30 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "~Trash/Demo_Zeppelin_Spark_Cassandra",
+  "id": "2CX52PXY8",
+  "angularObjects": {},
+  "config": {},
+  "info": {}
+}

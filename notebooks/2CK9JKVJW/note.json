@@ -1,0 +1,907 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n## Welcome to Structured Streaming demo\n\n\u003ca href\u003d\"https://www.bigdataspain.org\"\u003e\n  \u003cimg src\u003d\"https://www.bigdataspain.org/wp-content/themes/bds17/img/common/bds-logo.svg \"Big Data Spain\"\" width\u003d\"144\" height\u003d\"144\"\u003e\n\u003c/a\u003e\nAdd the following dependencies to the spark interpreter: \n* ```org.apache.spark:spark-streaming-kafka-0-10_2.11:2.2.0```\n* ```org.apache.spark:spark-sql-kafka-0-10_2.11:2.2.0```",
+      "user": "anonymous",
+      "dateUpdated": "Nov 14, 2017 8:07:27 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true
+        },
+        "editorMode": "ace/mode/markdown",
+        "editorHide": false,
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch2\u003eWelcome to Structured Streaming demo\u003c/h2\u003e\n\u003ca href\u003d\"https://www.bigdataspain.org\"\u003e\n  \u003cimg src\u003d\"https://www.bigdataspain.org/wp-content/themes/bds17/img/common/bds-logo.svg \"Big Data Spain\"\" width\u003d\"144\" height\u003d\"144\"\u003e\n\u003c/a\u003e\n\u003cp\u003eAdd the following dependencies to the spark interpreter:\u003cbr/\u003e* \u003ccode\u003eorg.apache.spark:spark-streaming-kafka-0-10_2.11:2.2.0\u003c/code\u003e\u003cbr/\u003e* \u003ccode\u003eorg.apache.spark:spark-sql-kafka-0-10_2.11:2.2.0\u003c/code\u003e\u003c/p\u003e\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1496773400966_426901212",
+      "id": "20170606-182320_455215110",
+      "dateCreated": "Jun 6, 2017 6:23:20 PM",
+      "dateStarted": "Nov 13, 2017 9:30:28 AM",
+      "dateFinished": "Nov 13, 2017 9:30:31 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Read DataFraframe from CSV",
+      "text": "spark.sql(\"set spark.sql.shuffle.partitions\u003d3\"); //improve performance by reducing the default number of partitions\r\nval batchDf \u003d spark\r\n        .read  // readStream for structured streaming ;)\r\n        .format(\"csv\") \r\n        .option(\"header\", \"true\") //reading the headers\r\n        .option(\"delimiter\",\";\") //set delimiter \r\n        .option(\"mode\", \"DROPMALFORMED\")\r\n        .csv(\"/usr/zeppelin/data/bank/bank-full.csv\")\r\n        \r\nbatchDf.isStreaming\r\nbatchDf.show(5)\r\nbatchDf.registerTempTable(\"bank\")\r\n\r\n\r\n",
+      "user": "anonymous",
+      "dateUpdated": "Nov 13, 2017 9:30:38 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true,
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "res0: org.apache.spark.sql.DataFrame \u003d [key: string, value: string]\nbatchDf: org.apache.spark.sql.DataFrame \u003d [age: string, job: string ... 15 more fields]\nres2: Boolean \u003d false\n+---+------------+-------+---------+-------+-------+-------+----+-------+---+-----+--------+--------+-----+--------+--------+---+\n|age|         job|marital|education|default|balance|housing|loan|contact|day|month|duration|campaign|pdays|previous|poutcome|  y|\n+---+------------+-------+---------+-------+-------+-------+----+-------+---+-----+--------+--------+-----+--------+--------+---+\n| 58|  management|married| tertiary|     no|   2143|    yes|  no|unknown|  5|  may|     261|       1|   -1|       0| unknown| no|\n| 44|  technician| single|secondary|     no|     29|    yes|  no|unknown|  5|  may|     151|       1|   -1|       0| unknown| no|\n| 33|entrepreneur|married|secondary|     no|      2|    yes| yes|unknown|  5|  may|      76|       1|   -1|       0| unknown| no|\n| 47| blue-collar|married|  unknown|     no|   1506|    yes|  no|unknown|  5|  may|      92|       1|   -1|       0| unknown| no|\n| 33|     unknown| single|  unknown|     no|      1|     no|  no|unknown|  5|  may|     198|       1|   -1|       0| unknown| no|\n+---+------------+-------+---------+-------+-------+-------+----+-------+---+-----+--------+--------+-----+--------+--------+---+\nonly showing top 5 rows\n\nwarning: there was one deprecation warning; re-run with -deprecation for details\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1496696452676_1189682229",
+      "id": "20170605-210052_1887255984",
+      "dateCreated": "Jun 5, 2017 9:00:52 PM",
+      "dateStarted": "Nov 10, 2017 2:44:26 PM",
+      "dateFinished": "Nov 10, 2017 2:45:35 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Age distribution from bank",
+      "text": "%sql select age, count(1) from bank where age \u003c 30 group by age order by age\n",
+      "user": "anonymous",
+      "dateUpdated": "Nov 13, 2017 9:30:41 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "multiBarChart",
+              "height": 300.0,
+              "optionOpen": false
+            },
+            "helium": {}
+          }
+        },
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/sql",
+        "editorHide": true,
+        "tableHide": false,
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "age\tcount(1)\n18\t12\n19\t35\n20\t50\n21\t79\n22\t129\n23\t202\n24\t302\n25\t527\n26\t805\n27\t909\n28\t1038\n29\t1185\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1496774000194_397534413",
+      "id": "20170606-183320_2108168495",
+      "dateCreated": "Jun 6, 2017 6:33:20 PM",
+      "dateStarted": "Nov 10, 2017 2:44:33 PM",
+      "dateFinished": "Nov 10, 2017 2:45:41 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Age distribution with certain marital status",
+      "text": "%sql\nselect age, count(1) from bank where marital\u003d\"${marital\u003dsingle,single|divorced|married}\" group by age order by age\n",
+      "user": "anonymous",
+      "dateUpdated": "Nov 13, 2017 9:30:47 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "multiBarChart",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "multiBarChart": {
+                  "stacked": false
+                }
+              },
+              "commonSetting": {},
+              "keys": [
+                {
+                  "name": "age",
+                  "index": 0.0,
+                  "aggr": "sum"
+                }
+              ],
+              "groups": [],
+              "values": [
+                {
+                  "name": "count(1)",
+                  "index": 1.0,
+                  "aggr": "sum"
+                }
+              ]
+            },
+            "helium": {}
+          }
+        },
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/sql",
+        "runOnSelectionChange": true,
+        "title": true,
+        "editorHide": true
+      },
+      "settings": {
+        "params": {
+          "marital": "single"
+        },
+        "forms": {
+          "marital": {
+            "name": "marital",
+            "defaultValue": "single",
+            "options": [
+              {
+                "value": "single"
+              },
+              {
+                "value": "divorced"
+              },
+              {
+                "value": "married"
+              }
+            ],
+            "hidden": false
+          }
+        }
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "age\tcount(1)\n18\t12\n19\t35\n20\t47\n21\t74\n22\t120\n23\t175\n24\t248\n25\t423\n26\t615\n27\t658\n28\t697\n29\t683\n30\t1012\n31\t1017\n32\t941\n33\t746\n34\t650\n35\t631\n36\t538\n37\t453\n38\t394\n39\t346\n40\t257\n41\t241\n42\t218\n43\t183\n44\t170\n45\t146\n46\t130\n47\t100\n48\t124\n49\t101\n50\t76\n51\t72\n52\t62\n53\t71\n54\t55\n55\t54\n56\t45\n57\t38\n58\t35\n59\t36\n60\t27\n61\t5\n63\t2\n66\t5\n67\t3\n68\t4\n69\t2\n70\t1\n71\t1\n72\t5\n73\t2\n77\t1\n83\t2\n86\t1\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1496773677409_-236022787",
+      "id": "20170606-182757_1365789518",
+      "dateCreated": "Jun 6, 2017 6:27:57 PM",
+      "dateStarted": "Nov 10, 2017 2:45:36 PM",
+      "dateFinished": "Nov 10, 2017 2:45:44 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Declare schema of incoming data",
+      "text": "import org.apache.spark.sql.types._\r\n\r\n// declare the schema for the incoming data\r\nval mySchema \u003d StructType(Array( \r\n StructField(\"machine\", StringType),\r\n StructField(\"status\", StringType),\r\n StructField(\"timestamp\", TimestampType),\r\n StructField(\"temperature\", DoubleType),\r\n StructField(\"pressure\", DoubleType),\r\n StructField(\"humidity\", DoubleType)\r\n))",
+      "user": "anonymous",
+      "dateUpdated": "Nov 13, 2017 8:19:56 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "text",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/text",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.sql.types._\nmySchema: org.apache.spark.sql.types.StructType \u003d StructType(StructField(machine,StringType,true), StructField(status,StringType,true), StructField(timestamp,TimestampType,true), StructField(temperature,DoubleType,true), StructField(pressure,DoubleType,true), StructField(humidity,DoubleType,true))\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1496773728205_683804564",
+      "id": "20170606-182848_1978297950",
+      "dateCreated": "Jun 6, 2017 6:28:48 PM",
+      "dateStarted": "Nov 13, 2017 8:19:56 AM",
+      "dateFinished": "Nov 13, 2017 8:20:20 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "query.stop()",
+      "user": "anonymous",
+      "dateUpdated": "Nov 11, 2017 5:43:16 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "jobName": "paragraph_1510422186036_-2040754805",
+      "id": "20171111-174306_122669947",
+      "dateCreated": "Nov 11, 2017 5:43:06 PM",
+      "dateStarted": "Nov 11, 2017 5:43:16 PM",
+      "dateFinished": "Nov 11, 2017 5:43:26 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Streaming Query example",
+      "text": "import org.apache.spark.sql.streaming._\r\nimport scala.concurrent.duration._\r\n    val query\u003dspark\r\n      .readStream\r\n      .format(\"kafka\")\r\n      .option(\"kafka.bootstrap.servers\", \"192.168.99.100:9092\")\r\n      .option(\"subscribe\", \"alarms,data\")\r\n      .option(\"group.id\", \"structured-Streaming-demo\")\r\n      .option(\"failOnDataLoss\", true) \r\n      .load()\r\n      .select(col(\"topic\"), from_json(col(\"value\").cast(\"string\"),mySchema).alias(\"parsed_value\")) //select kafka_topic, parse incoming data\r\n      .select(\"topic\",\"parsed_value.*\") //explode incominf data\r\n      .writeStream\r\n      .format(\"memory\") //with memory output we can use sparkSQL to test our streaming query\r\n      .queryName(\"test\")\r\n      .trigger(Trigger.ProcessingTime(10.seconds)) //if we do not trigger will start another \u0027batch\u0027 as soon as the job finishes\r\n      .start()\r\n\r\n",
+      "user": "anonymous",
+      "dateUpdated": "Nov 13, 2017 9:04:45 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "text",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/text",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.sql.streaming._\nimport scala.concurrent.duration._\nquery: org.apache.spark.sql.streaming.StreamingQuery \u003d org.apache.spark.sql.execution.streaming.StreamingQueryWrapper@6654ddc3\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1510321240191_526222939",
+      "id": "20171110-134040_533444187",
+      "dateCreated": "Nov 10, 2017 1:40:40 PM",
+      "dateStarted": "Nov 13, 2017 9:04:45 AM",
+      "dateFinished": "Nov 13, 2017 9:04:50 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Streaming Query data",
+      "text": "%sql\nselect * from test",
+      "user": "anonymous",
+      "dateUpdated": "Nov 13, 2017 9:36:36 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/sql",
+        "title": true,
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "topic\tmachine\tstatus\ttimestamp\ttemperature\tpressure\thumidity\ndata\tMACHINE1\tNORMAL\t2017-11-13 10:04:50.532\t50.5558169668902\t513.9548646407942\t59.13548865273117\ndata\tMACHINE1\tNORMAL\t2017-11-13 10:04:50.532\t50.5558169668902\t513.9548646407942\t59.13548865273117\ndata\tMACHINE2\tNORMAL\t2017-11-13 10:04:50.728\t41.64309057218162\t507.8152240147168\t60.68119612161779\ndata\tMACHINE2\tNORMAL\t2017-11-13 10:04:50.728\t41.64309057218162\t507.8152240147168\t60.68119612161779\ndata\tMACHINE1\tNORMAL\t2017-11-13 10:04:50.852\t13.560564381974793\t506.41968660528096\t45.209453112004006\ndata\tMACHINE1\tNORMAL\t2017-11-13 10:04:50.852\t13.560564381974793\t506.41968660528096\t45.209453112004006\ndata\tMACHINE2\tNORMAL\t2017-11-13 10:04:51.047\t1.4912739956454368\t529.5374519456764\t64.37755888525277\ndata\tMACHINE2\tNORMAL\t2017-11-13 10:04:51.047\t1.4912739956454368\t529.5374519456764\t64.37755888525277\ndata\tMACHINE1\tSUPERVISE\t2017-11-13 10:04:51.485\t13.630617424957725\t510.44333811458483\t52.69467904770987\ndata\tMACHINE1\tSUPERVISE\t2017-11-13 10:04:51.485\t13.630617424957725\t510.44333811458483\t52.69467904770987\nalarms\tMACHINE1\tCRITICAL\t2017-11-13 10:04:51.171\t45.15466924799464\t534.9185301627491\t83.97486100714153\nalarms\tMACHINE2\tCRITICAL\t2017-11-13 10:04:51.365\t30.209001936021362\t531.6098174273021\t88.15767175487214\nalarms\tMACHINE2\tCRITICAL\t2017-11-13 10:04:51.365\t30.209001936021362\t531.6098174273021\t88.15767175487214\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1510321790598_-1279609965",
+      "id": "20171110-134950_2062783563",
+      "dateCreated": "Nov 10, 2017 1:49:50 PM",
+      "dateStarted": "Nov 13, 2017 9:04:53 AM",
+      "dateFinished": "Nov 13, 2017 9:04:54 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Avg . Humidity per topic (data, alarms)",
+      "text": "%sql\nselect topic, avg(humidity), timestamp from test group by topic,timestamp",
+      "user": "anonymous",
+      "dateUpdated": "Nov 13, 2017 9:36:39 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "lineChart",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "lineChart": {
+                  "lineWithFocus": true
+                }
+              },
+              "commonSetting": {},
+              "keys": [
+                {
+                  "name": "timestamp",
+                  "index": 2.0,
+                  "aggr": "sum"
+                }
+              ],
+              "groups": [
+                {
+                  "name": "topic",
+                  "index": 0.0,
+                  "aggr": "sum"
+                }
+              ],
+              "values": [
+                {
+                  "name": "avg(humidity)",
+                  "index": 1.0,
+                  "aggr": "sum"
+                }
+              ]
+            },
+            "helium": {}
+          }
+        },
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/sql",
+        "title": true,
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "topic\tavg(humidity)\ttimestamp\ndata\t48.67743560664798\t2017-11-13 10:05:30.236\ndata\t71.97705531823917\t2017-11-13 10:05:39.514\ndata\t72.3765708063097\t2017-11-13 10:05:46.528\ndata\t55.7278853088725\t2017-11-13 10:08:27.531\ndata\t45.891207095573684\t2017-11-13 10:08:59.363\nalarms\t84.29656208921794\t2017-11-13 10:09:02.225\ndata\t72.57307127057805\t2017-11-13 10:09:05.729\ndata\t52.230294212894506\t2017-11-13 10:05:57.213\nalarms\t96.73112899579297\t2017-11-13 10:06:39.342\ndata\t41.7409512464661\t2017-11-13 10:06:43.872\ndata\t59.73587039206528\t2017-11-13 10:06:49.972\ndata\t69.61454600949973\t2017-11-13 10:07:06.826\nalarms\t98.96050750517988\t2017-11-13 10:07:30.379\ndata\t43.83828356801593\t2017-11-13 10:07:45.212\ndata\t44.598849151194656\t2017-11-13 10:04:58.434\ndata\t63.616100523351115\t2017-11-13 10:05:00.665\ndata\t54.21405164432322\t2017-11-13 10:05:00.779\ndata\t46.65671768250259\t2017-11-13 10:05:04.467\ndata\t43.52095926029581\t2017-11-13 10:05:50.206\nalarms\t91.36135117047225\t2017-11-13 10:05:58.168\ndata\t72.34115861177742\t2017-11-13 10:06:01.702\ndata\t66.35516709434617\t2017-11-13 10:06:45.198\nalarms\t89.6373367098696\t2017-11-13 10:06:59.51\nalarms\t96.52516453309256\t2017-11-13 10:07:02.058\ndata\t45.323381844394945\t2017-11-13 10:07:06.721\nalarms\t91.82141812467803\t2017-11-13 10:07:58.902\nalarms\t84.49026566754846\t2017-11-13 10:08:15.146\ndata\t55.76209189346692\t2017-11-13 10:08:31.829\ndata\t64.70411271885591\t2017-11-13 10:09:06.857\ndata\t72.67053301925911\t2017-11-13 10:09:09.855\nalarms\t97.31060208575728\t2017-11-13 10:09:13.864\nalarms\t83.24400344685068\t2017-11-13 10:06:26.368\ndata\t60.85068695492291\t2017-11-13 10:06:24.193\ndata\t60.850295320522655\t2017-11-13 10:06:50.491\nalarms\t99.92816148796996\t2017-11-13 10:07:17.854\ndata\t69.23648557529032\t2017-11-13 10:07:12.516\ndata\t68.98451333500492\t2017-11-13 10:07:16.584\ndata\t54.52787129764338\t2017-11-13 10:07:37.879\nalarms\t88.11228173510037\t2017-11-13 10:07:43.62\ndata\t71.81177368928962\t2017-11-13 10:08:53.302\ndata\t42.583783030629206\t2017-11-13 10:05:14.096\ndata\t54.04945253688223\t2017-11-13 10:06:04.606\nalarms\t96.56031548271775\t2017-11-13 10:06:14.166\nalarms\t89.42133571044536\t2017-11-13 10:07:35.156\ndata\t58.26437994844012\t2017-11-13 10:07:52.839\nalarms\t90.33782400963884\t2017-11-13 10:08:18.957\ndata\t61.79241807786205\t2017-11-13 10:08:29.909\nalarms\t89.52644969072749\t2017-11-13 10:09:18.773\ndata\t43.24188802530674\t2017-11-13 10:05:12.325\ndata\t62.55630874420845\t2017-11-13 10:06:56.862\ndata\t52.28835150029159\t2017-11-13 10:07:09.052\nalarms\t91.96417682790626\t2017-11-13 10:07:21.654\ndata\t72.62229181364467\t2017-11-13 10:08:11.446\ndata\t72.65864035212212\t2017-11-13 10:08:26.263\ndata\t58.63162648205869\t2017-11-13 10:08:35.318\ndata\t55.13432099704191\t2017-11-13 10:04:53.114\ndata\t51.42175888192789\t2017-11-13 10:04:57.153\nalarms\t85.51534766972901\t2017-11-13 10:06:03.717\ndata\t70.80904234908056\t2017-11-13 10:06:24.38\nalarms\t88.77916142035554\t2017-11-13 10:06:55.066\ndata\t63.34935712184276\t2017-11-13 10:07:28.037\ndata\t68.49206168840237\t2017-11-13 10:07:38.199\nalarms\t99.78390025069422\t2017-11-13 10:07:50.098\ndata\t45.787734266019626\t2017-11-13 10:07:59.335\ndata\t54.437637959363016\t2017-11-13 10:08:10.171\ndata\t62.13111253420514\t2017-11-13 10:08:32.735\nalarms\t85.86305490087616\t2017-11-13 10:08:57.915\ndata\t45.65900554567883\t2017-11-13 10:09:29.642\ndata\t64.37755888525277\t2017-11-13 10:04:51.047\ndata\t44.72418789124879\t2017-11-13 10:05:13.922\ndata\t58.41323596042405\t2017-11-13 10:05:16.786\ndata\t41.77500998856412\t2017-11-13 10:05:17.936\nalarms\t90.7213177802621\t2017-11-13 10:06:14.277\nalarms\t99.69858689517042\t2017-11-13 10:07:03.643\nalarms\t83.71318190007852\t2017-11-13 10:07:19.866\ndata\t71.36366968899947\t2017-11-13 10:08:14.195\ndata\t69.32393538259169\t2017-11-13 10:08:28.805\nalarms\t85.44435798624664\t2017-11-13 10:08:43.442\ndata\t74.73926898371785\t2017-11-13 10:05:05.917\nalarms\t85.22328331213049\t2017-11-13 10:05:31.206\ndata\t61.150309563540446\t2017-11-13 10:06:52.343\ndata\t68.65887470519752\t2017-11-13 10:06:54.944\nalarms\t89.68113126147696\t2017-11-13 10:07:19.502\nalarms\t81.0402467565307\t2017-11-13 10:07:53.277\nalarms\t82.38623997324521\t2017-11-13 10:08:10.489\ndata\t46.11996867581661\t2017-11-13 10:08:17.693\nalarms\t83.82695558668561\t2017-11-13 10:08:31.676\nalarms\t93.79115957179147\t2017-11-13 10:08:39.147\nalarms\t89.93819667056586\t2017-11-13 10:08:53.789\nalarms\t91.90728747916371\t2017-11-13 10:05:20.161\ndata\t58.26049899988293\t2017-11-13 10:05:26.184\ndata\t53.72389331080462\t2017-11-13 10:06:07.838\nalarms\t80.22534918667158\t2017-11-13 10:06:13.848\ndata\t61.79275732891212\t2017-11-13 10:06:21.196\ndata\t74.93846407791906\t2017-11-13 10:06:20.328\ndata\t61.348619182047656\t2017-11-13 10:06:37.24\ndata\t65.72117676312531\t2017-11-13 10:09:15.147\ndata\t58.57052129282546\t2017-11-13 10:04:52.653\ndata\t61.17654169896194\t2017-11-13 10:05:05.15\ndata\t49.980232047927885\t2017-11-13 10:05:25.71\nalarms\t88.76279981069568\t2017-11-13 10:05:38.757\ndata\t59.51920385840045\t2017-11-13 10:05:47.355\ndata\t47.84125410203823\t2017-11-13 10:05:57.642\ndata\t68.08479317704726\t2017-11-13 10:07:54.548\ndata\t62.07255065544017\t2017-11-13 10:07:55.064\ndata\t43.12550611141677\t2017-11-13 10:05:04.627\ndata\t61.6731082271183\t2017-11-13 10:05:28.295\ndata\t58.78867827146296\t2017-11-13 10:05:48.936\nalarms\t95.90435919958283\t2017-11-13 10:05:49.074\ndata\t50.48668120896911\t2017-11-13 10:06:17.054\ndata\t50.059315292636896\t2017-11-13 10:06:34.892\ndata\t45.15085005419148\t2017-11-13 10:07:10.282\ndata\t47.34165551202974\t2017-11-13 10:07:12.448\nalarms\t94.72747326147736\t2017-11-13 10:07:34.204\nalarms\t96.38454408376597\t2017-11-13 10:08:46.463\ndata\t43.600859132944066\t2017-11-13 10:08:51.346\nalarms\t87.49120615870974\t2017-11-13 10:09:04.63\nalarms\t85.85775495828385\t2017-11-13 10:05:04.599\ndata\t59.91009283439037\t2017-11-13 10:05:50.024\ndata\t65.23025614599513\t2017-11-13 10:06:19.723\ndata\t72.02840661710093\t2017-11-13 10:06:20.551\nalarms\t87.13767826882892\t2017-11-13 10:07:21.457\nalarms\t95.5785744064314\t2017-11-13 10:07:26.441\ndata\t72.93298405379986\t2017-11-13 10:07:38.523\nalarms\t98.09405633412277\t2017-11-13 10:08:03.175\nalarms\t85.62052824393153\t2017-11-13 10:09:10.175\ndata\t60.082875308604066\t2017-11-13 10:09:07.638\nalarms\t97.96269137374469\t2017-11-13 10:06:11.981\ndata\t43.36948915334278\t2017-11-13 10:06:17.37\ndata\t52.250350433892\t2017-11-13 10:06:21.645\ndata\t41.81236060448757\t2017-11-13 10:06:39.466\nalarms\t81.63852008558216\t2017-11-13 10:06:30.556\ndata\t70.15421651696501\t2017-11-13 10:06:48.911\nalarms\t84.83277329332915\t2017-11-13 10:06:49.335\ndata\t70.83044186580528\t2017-11-13 10:07:07.039\nalarms\t91.70725160797471\t2017-11-13 10:07:31.203\ndata\t65.63335752545261\t2017-11-13 10:07:48.515\nalarms\t93.94978238472011\t2017-11-13 10:08:25.769\ndata\t57.06717434258252\t2017-11-13 10:08:25.944\ndata\t58.036658006393424\t2017-11-13 10:08:34.959\nalarms\t96.22010487916786\t2017-11-13 10:09:03.992\ndata\t56.39647013528638\t2017-11-13 10:09:27.092\ndata\t72.20964281652371\t2017-11-13 10:09:27.573\ndata\t67.45441282813898\t2017-11-13 10:04:55.352\ndata\t54.93033510458676\t2017-11-13 10:06:17.163\ndata\t45.100345131613835\t2017-11-13 10:06:23.108\nalarms\t80.21628971688274\t2017-11-13 10:06:49.864\nalarms\t92.02523908662823\t2017-11-13 10:07:56.977\ndata\t68.54923439965258\t2017-11-13 10:08:01.445\ndata\t66.62825726578353\t2017-11-13 10:05:17.106\nalarms\t83.60925625668239\t2017-11-13 10:05:24.622\nalarms\t96.27309909692846\t2017-11-13 10:05:36.328\nalarms\t80.86256663318497\t2017-11-13 10:05:40.031\ndata\t55.77811644446281\t2017-11-13 10:06:42.638\ndata\t45.33576610079681\t2017-11-13 10:07:55.653\nalarms\t82.33347870437055\t2017-11-13 10:08:47.265\ndata\t67.34887339136085\t2017-11-13 10:08:44.875\ndata\t52.59653903323613\t2017-11-13 10:05:00.461\ndata\t49.64370515859986\t2017-11-13 10:05:18.061\nalarms\t92.42559495720364\t2017-11-13 10:05:46.402\ndata\t59.77382602286332\t2017-11-13 10:06:13.531\nalarms\t89.15152693378406\t2017-11-13 10:06:34.056\ndata\t43.80984533863407\t2017-11-13 10:07:05.237\ndata\t49.10332207948832\t2017-11-13 10:07:15.268\ndata\t44.34880842899581\t2017-11-13 10:07:36.927\ndata\t63.069545709982776\t2017-11-13 10:08:04.632\nalarms\t85.12081496084546\t2017-11-13 10:09:04.457\ndata\t53.23089101314352\t2017-11-13 10:09:08.591\nalarms\t90.63463781014343\t2017-11-13 10:09:23.907\ndata\t47.116581952073794\t2017-11-13 10:06:55.701\nalarms\t93.35148453925073\t2017-11-13 10:06:59.094\ndata\t62.235867775260374\t2017-11-13 10:07:04.765\ndata\t52.98313931559358\t2017-11-13 10:08:02.716\ndata\t43.40459818926567\t2017-11-13 10:08:13.555\nalarms\t94.15372825528806\t2017-11-13 10:08:56.771\ndata\t70.79885303952041\t2017-11-13 10:04:52.46\ndata\t60.17556702082139\t2017-11-13 10:05:05.79\nalarms\t89.22643973821339\t2017-11-13 10:06:21.835\ndata\t67.37318613578911\t2017-11-13 10:07:30.064\nalarms\t86.1567665965195\t2017-11-13 10:08:22.214\ndata\t51.74364741903702\t2017-11-13 10:08:29.76\nalarms\t88.9733119137237\t2017-11-13 10:09:15.463\ndata\t66.97796719091518\t2017-11-13 10:09:28.681\ndata\t52.24952555777537\t2017-11-13 10:05:59.453\ndata\t54.01019730029347\t2017-11-13 10:06:15.257\nalarms\t83.57042496143983\t2017-11-13 10:06:22.152\ndata\t61.218816623711795\t2017-11-13 10:06:50.764\ndata\t49.77333759268241\t2017-11-13 10:06:53.662\ndata\t50.4206866877571\t2017-11-13 10:06:58.775\nalarms\t94.71524240528792\t2017-11-13 10:07:17.536\ndata\t66.4062880465973\t2017-11-13 10:07:10.536\ndata\t52.195995167001335\t2017-11-13 10:08:13.993\ndata\t48.18883127767225\t2017-11-13 10:08:27.998\ndata\t45.19477470634383\t2017-11-13 10:08:31.041\ndata\t51.93432198871699\t2017-11-13 10:08:31.358\ndata\t66.42962281953183\t2017-11-13 10:08:48.528\nalarms\t84.25100870437802\t2017-11-13 10:08:53.621\ndata\t67.24632230365263\t2017-11-13 10:08:57.133\nalarms\t88.43029398648918\t2017-11-13 10:09:29.323\nalarms\t89.92796366578827\t2017-11-13 10:05:44.176\nalarms\t95.28284509109172\t2017-11-13 10:06:38.834\ndata\t63.786509584671826\t2017-11-13 10:06:52.837\ndata\t70.68185338390592\t2017-11-13 10:06:55.899\ndata\t55.18258159555887\t2017-11-13 10:07:39.154\ndata\t48.75092385258945\t2017-11-13 10:08:00.298\ndata\t55.59933650905669\t2017-11-13 10:08:32.635\nalarms\t99.84853361458582\t2017-11-13 10:08:42.322\nalarms\t81.13687255702241\t2017-11-13 10:05:03.012\ndata\t73.56851161016428\t2017-11-13 10:05:08.485\ndata\t57.39668605278652\t2017-11-13 10:05:19.648\ndata\t63.49882032966711\t2017-11-13 10:06:05.929\ndata\t66.4487346396889\t2017-11-13 10:06:10.981\nalarms\t93.73804916954826\t2017-11-13 10:06:22.917\ndata\t60.87199851839328\t2017-11-13 10:06:26.929\nalarms\t90.89776137078871\t2017-11-13 10:07:23.369\nalarms\t86.46634328337495\t2017-11-13 10:08:08.896\nalarms\t86.50050617284947\t2017-11-13 10:08:26.09\ndata\t56.776461436989294\t2017-11-13 10:08:54.108\nalarms\t94.20007982352196\t2017-11-13 10:09:27.891\nalarms\t99.58224450854843\t2017-11-13 10:05:15.194\nalarms\t84.8251466520962\t2017-11-13 10:05:38.12\ndata\t65.43019127738856\t2017-11-13 10:05:32.486\nalarms\t90.794547338604\t2017-11-13 10:07:34.063\nalarms\t82.61138866214475\t2017-11-13 10:07:41.836\ndata\t72.00985504422141\t2017-11-13 10:08:06.026\nalarms\t99.36881448944703\t2017-11-13 10:08:10.005\ndata\t45.75850100334765\t2017-11-13 10:08:18.911\nalarms\t98.73665486276866\t2017-11-13 10:08:32.463\ndata\t60.15464822330078\t2017-11-13 10:08:52.027\nalarms\t93.12947372379504\t2017-11-13 10:09:03.039\nalarms\t84.74843617946681\t2017-11-13 10:04:51.692\ndata\t64.08468206937975\t2017-11-13 10:05:15.833\nalarms\t83.12659298913769\t2017-11-13 10:05:12.606\nalarms\t91.585645676667\t2017-11-13 10:05:54.666\ndata\t70.32264967106778\t2017-11-13 10:05:54.791\nalarms\t82.22172965234766\t2017-11-13 10:06:13.277\ndata\t56.782165529913314\t2017-11-13 10:06:22.47\ndata\t50.498390250828876\t2017-11-13 10:07:16.902\ndata\t59.02908601630144\t2017-11-13 10:08:03.675\nalarms\t85.8832281914794\t2017-11-13 10:08:46.781\nalarms\t81.80075554750266\t2017-11-13 10:08:53.581\ndata\t56.585432787477586\t2017-11-13 10:09:17.375\nalarms\t95.83468849671704\t2017-11-13 10:05:15.693\nalarms\t90.76971017817654\t2017-11-13 10:05:42.907\ndata\t70.95007366603194\t2017-11-13 10:06:54.626\nalarms\t83.5088125700505\t2017-11-13 10:07:02.375\nalarms\t98.1962658625092\t2017-11-13 10:07:30.696\nalarms\t83.78791126562896\t2017-11-13 10:07:34.699\ndata\t46.37308252585608\t2017-11-13 10:08:15.267\ndata\t69.58763474537731\t2017-11-13 10:08:38.048\nalarms\t88.73719310487371\t2017-11-13 10:09:06.539\ndata\t66.26174312124104\t2017-11-13 10:04:57.796\ndata\t61.249907682601936\t2017-11-13 10:06:00.745\ndata\t45.00881693974822\t2017-11-13 10:06:22.28\ndata\t45.34475125194806\t2017-11-13 10:07:22.69\ndata\t56.1590917665758\t2017-11-13 10:07:39.288\ndata\t56.57096288144225\t2017-11-13 10:08:36.56\ndata\t71.03192654524574\t2017-11-13 10:08:39.637\ndata\t49.56949760118394\t2017-11-13 10:05:26.354\nalarms\t83.97266735128096\t2017-11-13 10:06:08.758\nalarms\t89.76559400738492\t2017-11-13 10:07:04.282\nalarms\t96.37965893798685\t2017-11-13 10:07:07.732\ndata\t70.28150214178345\t2017-11-13 10:07:47.879\nalarms\t88.87948654334681\t2017-11-13 10:08:11.324\nalarms\t86.10149642091208\t2017-11-13 10:08:19.591\ndata\t46.08697606698756\t2017-11-13 10:08:30.082\nalarms\t84.6780916297151\t2017-11-13 10:08:46.575\ndata\t41.705753941604286\t2017-11-13 10:09:23.591\nalarms\t93.52318754360712\t2017-11-13 10:04:59.028\ndata\t44.81933785046897\t2017-11-13 10:05:08.344\ndata\t70.28708874869483\t2017-11-13 10:05:35.06\nalarms\t95.59346791002257\t2017-11-13 10:05:41.951\nalarms\t88.29497872017004\t2017-11-13 10:06:02.041\nalarms\t82.38877111028346\t2017-11-13 10:06:25.735\nalarms\t85.13367491026469\t2017-11-13 10:06:29.171\nalarms\t94.89161818543458\t2017-11-13 10:07:32.479\ndata\t68.31409075843406\t2017-11-13 10:08:04.445\nalarms\t99.7153737343255\t2017-11-13 10:08:37.878\ndata\t56.68512162969839\t2017-11-13 10:06:06.51\nalarms\t98.5681438749765\t2017-11-13 10:07:40.433\nalarms\t83.95330468519596\t2017-11-13 10:08:20.229\ndata\t48.72930499894073\t2017-11-13 10:09:25.654\nalarms\t98.70493256946642\t2017-11-13 10:05:02.693\ndata\t45.64836164669747\t2017-11-13 10:05:06.429\ndata\t64.29244857292196\t2017-11-13 10:05:28.619\ndata\t44.94049168331352\t2017-11-13 10:05:37.169\nalarms\t85.67646965975824\t2017-11-13 10:05:58.493\ndata\t66.74481225897354\t2017-11-13 10:07:44.07\nalarms\t81.80457479794262\t2017-11-13 10:08:02.857\nalarms\t92.33370045629806\t2017-11-13 10:08:46.947\nalarms\t81.08154105302779\t2017-11-13 10:09:12.406\ndata\t70.01206949106887\t2017-11-13 10:05:03.981\nalarms\t99.97286983714622\t2017-11-13 10:05:12.651\nalarms\t90.0584034786418\t2017-11-13 10:05:31.737\ndata\t52.50840653077494\t2017-11-13 10:05:51.298\ndata\t56.040719945193516\t2017-11-13 10:05:55.418\ndata\t59.378957507952634\t2017-11-13 10:06:12.302\ndata\t52.94609066342476\t2017-11-13 10:06:35.646\nalarms\t94.81727104419376\t2017-11-13 10:06:32.149\ndata\t67.28330461929681\t2017-11-13 10:07:17.327\ndata\t59.05628555156515\t2017-11-13 10:07:37.563\ndata\t60.59135586271596\t2017-11-13 10:07:49.78\ndata\t72.69012846557972\t2017-11-13 10:08:56.961\ndata\t54.82778243391295\t2017-11-13 10:09:18.126\nalarms\t98.61243612428007\t2017-11-13 10:05:06.109\ndata\t69.49782845135819\t2017-11-13 10:05:12.507\nalarms\t84.70425642122561\t2017-11-13 10:05:58.909\ndata\t44.962122745548946\t2017-11-13 10:05:54.342\nalarms\t93.59930505773936\t2017-11-13 10:06:23.745\nalarms\t93.21832480405088\t2017-11-13 10:06:48.273\ndata\t56.68596469366079\t2017-11-13 10:07:32.932\ndata\t60.41339685267813\t2017-11-13 10:07:35.969\nalarms\t91.4057328533782\t2017-11-13 10:08:16.224\nalarms\t89.08519462310113\t2017-11-13 10:09:00.641\nalarms\t93.29089785963012\t2017-11-13 10:09:13.547\nalarms\t81.48187136985342\t2017-11-13 10:05:39.195\ndata\t50.691647991550475\t2017-11-13 10:05:36.962\ndata\t65.36033300653422\t2017-11-13 10:06:10.932\nalarms\t98.97700634571608\t2017-11-13 10:06:57.457\nalarms\t85.79711100733364\t2017-11-13 10:07:04.496\ndata\t71.25066284705659\t2017-11-13 10:07:03.228\ndata\t51.676881345866676\t2017-11-13 10:07:46.48\ndata\t52.975908516189506\t2017-11-13 10:08:24.501\ndata\t72.18127895332987\t2017-11-13 10:08:33.269\ndata\t42.59750226538733\t2017-11-13 10:09:09.537\ndata\t71.13331753203161\t2017-11-13 10:05:38.243\nalarms\t85.02526103041808\t2017-11-13 10:06:04.037\nalarms\t82.42260907582525\t2017-11-13 10:06:09.439\ndata\t56.224127435550145\t2017-11-13 10:06:09.711\ndata\t40.2083629652493\t2017-11-13 10:06:43.911\ndata\t59.49887408931865\t2017-11-13 10:07:08.108\ndata\t61.90961688160945\t2017-11-13 10:07:14.784\ndata\t42.294114978440284\t2017-11-13 10:07:18.596\ndata\t47.95384519037564\t2017-11-13 10:08:57.599\nalarms\t96.97114712328624\t2017-11-13 10:09:29.802\ndata\t49.87966803812746\t2017-11-13 10:04:56.627\ndata\t53.658421599770406\t2017-11-13 10:05:17.697\ndata\t51.98601018023684\t2017-11-13 10:05:56.572\ndata\t47.74169883332668\t2017-11-13 10:06:06.83\ndata\t44.18522234861868\t2017-11-13 10:06:53.473\ndata\t71.94448722415538\t2017-11-13 10:07:01.957\ndata\t54.397000691103706\t2017-11-13 10:07:54.877\ndata\t66.26780005848441\t2017-11-13 10:08:15.903\ndata\t72.32874022578201\t2017-11-13 10:08:50.924\ndata\t61.47257136409997\t2017-11-13 10:09:06.22\nalarms\t99.62468386535338\t2017-11-13 10:05:22.077\ndata\t48.526787232397105\t2017-11-13 10:06:07.479\nalarms\t91.20697279557719\t2017-11-13 10:06:19.08\nalarms\t99.25027892801597\t2017-11-13 10:06:40.734\nalarms\t93.64540228413803\t2017-11-13 10:07:17.007\ndata\t61.89642780657512\t2017-11-13 10:07:54.747\ndata\t43.524184373515965\t2017-11-13 10:08:28.315\ndata\t67.66290553647447\t2017-11-13 10:08:43.24\ndata\t56.262664448477295\t2017-11-13 10:05:08.026\ndata\t73.99384830926857\t2017-11-13 10:05:18.889\ndata\t52.37611899851651\t2017-11-13 10:05:24.439\ndata\t68.74977358562498\t2017-11-13 10:05:55.621\ndata\t51.451180844681204\t2017-11-13 10:06:18.007\ndata\t55.700410104664435\t2017-11-13 10:06:19.687\nalarms\t82.06182203754692\t2017-11-13 10:06:50.81\ndata\t41.81847184693772\t2017-11-13 10:07:44.706\ndata\t68.16787544627572\t2017-11-13 10:08:05.591\nalarms\t97.68360652268694\t2017-11-13 10:08:11.963\ndata\t67.32001781415974\t2017-11-13 10:08:20.549\ndata\t71.7588009610885\t2017-11-13 10:09:02.723\nalarms\t99.36479386256964\t2017-11-13 10:09:19.406\nalarms\t85.81926241701419\t2017-11-13 10:05:21.114\ndata\t53.32614293554929\t2017-11-13 10:05:44.936\ndata\t40.98270584344323\t2017-11-13 10:06:02.675\nalarms\t88.58096166404302\t2017-11-13 10:06:59.413\ndata\t49.31367179619552\t2017-11-13 10:07:15.633\ndata\t44.1450612008502\t2017-11-13 10:07:19.707\nalarms\t82.45085104617188\t2017-11-13 10:07:40.118\nalarms\t91.64304693037516\t2017-11-13 10:08:55.546\nalarms\t96.43828870937553\t2017-11-13 10:09:21.836\nalarms\t92.43327231767202\t2017-11-13 10:09:22.947\ndata\t47.11010906662341\t2017-11-13 10:04:55.566\ndata\t43.84152692120577\t2017-11-13 10:05:12.969\nalarms\t99.66930279005746\t2017-11-13 10:05:30.427\ndata\t52.35492658585803\t2017-11-13 10:05:48.755\ndata\t74.59750738512638\t2017-11-13 10:06:58.877\ndata\t57.622579483138594\t2017-11-13 10:07:02.691\ndata\t68.78685559130167\t2017-11-13 10:07:06.082\nalarms\t81.53654952462377\t2017-11-13 10:07:38.971\ndata\t60.87022698029351\t2017-11-13 10:08:30.724\ndata\t68.10870232130121\t2017-11-13 10:06:01.793\nalarms\t99.74364882942322\t2017-11-13 10:07:05.557\nalarms\t98.01887697510958\t2017-11-13 10:07:07.788\ndata\t73.56691754701754\t2017-11-13 10:07:02.275\ndata\t69.20763115483611\t2017-11-13 10:08:42.005\ndata\t62.5756017660012\t2017-11-13 10:08:43.121\ndata\t72.43470654882563\t2017-11-13 10:08:49.65\ndata\t49.99116887864524\t2017-11-13 10:09:08.437\ndata\t40.738981323292464\t2017-11-13 10:09:14.183\ndata\t41.366242515588716\t2017-11-13 10:09:27.364\ndata\t62.50681279804728\t2017-11-13 10:06:06.567\nalarms\t96.49992557782495\t2017-11-13 10:08:25.626\nalarms\t97.11389374460887\t2017-11-13 10:08:44.829\ndata\t60.57265124573813\t2017-11-13 10:09:03.5\ndata\t55.36010021449004\t2017-11-13 10:05:20.876\ndata\t68.08449884105761\t2017-11-13 10:05:43.542\nalarms\t99.52873896423749\t2017-11-13 10:05:51.931\ndata\t44.975591085177015\t2017-11-13 10:05:59.226\ndata\t41.28887208066058\t2017-11-13 10:06:42.002\ndata\t52.50259698416227\t2017-11-13 10:07:43.938\ndata\t55.83696514494916\t2017-11-13 10:07:58.574\ndata\t53.374635230259635\t2017-11-13 10:08:44.086\nalarms\t91.01409158065626\t2017-11-13 10:09:18.446\ndata\t70.59360961054706\t2017-11-13 10:04:56.31\ndata\t60.53797091800145\t2017-11-13 10:05:04.832\nalarms\t89.85848140990751\t2017-11-13 10:05:13.239\ndata\t69.19556160355046\t2017-11-13 10:05:46.209\ndata\t70.37290214643475\t2017-11-13 10:06:39.978\ndata\t45.39546888034001\t2017-11-13 10:07:29.104\ndata\t64.38875931147506\t2017-11-13 10:07:29.624\ndata\t74.83163823795734\t2017-11-13 10:08:08.459\ndata\t47.71188450733954\t2017-11-13 10:08:38.364\ndata\t62.45035629114767\t2017-11-13 10:08:54.747\ndata\t72.03514597848994\t2017-11-13 10:04:53.435\nalarms\t81.9744701097226\t2017-11-13 10:06:25.969\ndata\t66.73168251320624\t2017-11-13 10:06:56.017\nalarms\t90.95843277910379\t2017-11-13 10:07:15.74\ndata\t59.660963882840164\t2017-11-13 10:07:14.424\ndata\t41.7957635843647\t2017-11-13 10:07:24.528\nalarms\t93.14291725935897\t2017-11-13 10:07:42.477\ndata\t61.52301088667481\t2017-11-13 10:04:52.327\ndata\t59.968597218827824\t2017-11-13 10:05:22.716\ndata\t45.55491990819484\t2017-11-13 10:05:38.438\nalarms\t89.52622806051365\t2017-11-13 10:07:49.3\nalarms\t81.17329023126577\t2017-11-13 10:09:01.771\nalarms\t97.25425624075149\t2017-11-13 10:09:13.228\ndata\t42.05546403338388\t2017-11-13 10:05:00.982\nalarms\t95.72056910191507\t2017-11-13 10:05:36.85\ndata\t73.39578853596427\t2017-11-13 10:06:23.429\nalarms\t97.82813146162974\t2017-11-13 10:07:14.149\ndata\t42.79039093924306\t2017-11-13 10:07:37.381\nalarms\t98.82633891701005\t2017-11-13 10:07:57.427\nalarms\t87.98957106560006\t2017-11-13 10:08:36.766\ndata\t52.11262538160004\t2017-11-13 10:09:20.565\ndata\t45.26949828673065\t2017-11-13 10:09:29.006\nalarms\t98.90876172607994\t2017-11-13 10:05:16.011\ndata\t49.492820873704545\t2017-11-13 10:06:51.444\nalarms\t84.22564179512045\t2017-11-13 10:08:01.126\nalarms\t85.45444710979777\t2017-11-13 10:08:13.877\nalarms\t92.50359171402303\t2017-11-13 10:08:25.135\nalarms\t87.36073777632856\t2017-11-13 10:08:28.488\ndata\t49.30724028636068\t2017-11-13 10:08:30.229\ndata\t52.598680039535125\t2017-11-13 10:09:03.818\ndata\t73.8785036524116\t2017-11-13 10:05:18.253\nalarms\t98.43476921954841\t2017-11-13 10:05:34.426\ndata\t72.88047107184035\t2017-11-13 10:05:30.558\ndata\t68.53127027011014\t2017-11-13 10:06:35.846\ndata\t55.875845664587146\t2017-11-13 10:06:47.758\nalarms\t98.05529362612057\t2017-11-13 10:08:42.639\nalarms\t86.80872015529215\t2017-11-13 10:08:50.288\ndata\t45.92682095516291\t2017-11-13 10:09:02.089\ndata\t74.82531663968376\t2017-11-13 10:09:23.11\nalarms\t80.69633481276205\t2017-11-13 10:09:25.973\nalarms\t93.0068572638655\t2017-11-13 10:05:03.662\ndata\t65.50177117113051\t2017-11-13 10:05:14.559\ndata\t49.161640878857966\t2017-11-13 10:05:21.428\ndata\t57.626717534001514\t2017-11-13 10:06:03.306\ndata\t65.44108671402097\t2017-11-13 10:06:40.615\nalarms\t85.0199410315364\t2017-11-13 10:07:50.414\nalarms\t85.40044854618456\t2017-11-13 10:07:55.833\ndata\t51.39779745308408\t2017-11-13 10:08:52.67\ndata\t43.61069983728746\t2017-11-13 10:04:59.505\ndata\t52.383167434410126\t2017-11-13 10:05:12.188\nalarms\t95.72873440352288\t2017-11-13 10:05:39.835\ndata\t58.3907446108031\t2017-11-13 10:05:50.342\ndata\t53.04184983090522\t2017-11-13 10:06:14.482\nalarms\t86.41945725891053\t2017-11-13 10:06:29.488\ndata\t63.36299113455406\t2017-11-13 10:07:08.314\ndata\t53.81919628748204\t2017-11-13 10:07:46.922\ndata\t60.406702516286984\t2017-11-13 10:08:06.982\nalarms\t97.07390225945878\t2017-11-13 10:08:20.034\ndata\t70.42316326183078\t2017-11-13 10:08:49.487\ndata\t46.32992739700617\t2017-11-13 10:08:58.091\ndata\t54.4851022526986\t2017-11-13 10:05:00.3\ndata\t70.44012542540986\t2017-11-13 10:05:02.259\ndata\t64.35860719358837\t2017-11-13 10:05:51.614\ndata\t49.92941133988483\t2017-11-13 10:06:45.838\ndata\t74.30709622154748\t2017-11-13 10:07:16.219\ndata\t43.34743115983344\t2017-11-13 10:07:36.109\ndata\t67.47142762556236\t2017-11-13 10:08:12.237\ndata\t66.38817950544805\t2017-11-13 10:08:35.009\ndata\t57.45343156265754\t2017-11-13 10:05:27.319\nalarms\t97.94268987518538\t2017-11-13 10:06:42.86\ndata\t44.945583080272804\t2017-11-13 10:07:29.308\nalarms\t88.90873271093443\t2017-11-13 10:07:51.569\nalarms\t86.31469704180336\t2017-11-13 10:07:51.687\ndata\t70.18996846470114\t2017-11-13 10:08:23.544\ndata\t56.151625484881635\t2017-11-13 10:08:36.447\ndata\t72.33765430138249\t2017-11-13 10:08:43.282\ndata\t67.4993597794037\t2017-11-13 10:09:16.849\ndata\t66.49198953494754\t2017-11-13 10:09:20.881\nalarms\t80.03270013404051\t2017-11-13 10:05:03.87\ndata\t44.006451414220365\t2017-11-13 10:05:15.514\ndata\t40.20602356537856\t2017-11-13 10:06:15.893\nalarms\t81.17795397715656\t2017-11-13 10:07:32.161\ndata\t41.580721189622224\t2017-11-13 10:08:48.058\ndata\t69.09271233753373\t2017-11-13 10:05:04.283\ndata\t52.57484214309697\t2017-11-13 10:05:39.392\ndata\t46.252891709371056\t2017-11-13 10:05:55.372\ndata\t66.85204270597282\t2017-11-13 10:06:12.619\ndata\t43.25027673419529\t2017-11-13 10:06:22.788\nalarms\t80.28570450164007\t2017-11-13 10:06:31.511\ndata\t70.32697915481963\t2017-11-13 10:07:19.23\ndata\t71.2923104305988\t2017-11-13 10:08:27.364\nalarms\t96.80589160172613\t2017-11-13 10:06:28.967\ndata\t66.44349736114285\t2017-11-13 10:06:36.162\nalarms\t93.02513970866778\t2017-11-13 10:07:52.472\ndata\t74.47824319884097\t2017-11-13 10:07:58.379\ndata\t59.30969769601486\t2017-11-13 10:08:37.407\ndata\t48.9229348186247\t2017-11-13 10:08:58.73\nalarms\t97.81235027164794\t2017-11-13 10:09:09.079\ndata\t54.72918876818606\t2017-11-13 10:09:07.005\ndata\t72.28144683920424\t2017-11-13 10:09:20.05\nalarms\t91.1512503717037\t2017-11-13 10:09:24.224\ndata\t56.2159929489316\t2017-11-13 10:05:06.873\ndata\t56.247712797346864\t2017-11-13 10:05:16.151\ndata\t57.0904406671236\t2017-11-13 10:05:34.376\nalarms\t81.89934670810635\t2017-11-13 10:06:00.511\ndata\t73.20108079293021\t2017-11-13 10:06:01.379\ndata\t68.534072354735\t2017-11-13 10:06:34.528\ndata\t63.22624615738888\t2017-11-13 10:06:55.262\ndata\t54.07583580920757\t2017-11-13 10:07:58.697\ndata\t42.247139641727244\t2017-11-13 10:08:03.993\nalarms\t97.21427447702284\t2017-11-13 10:09:15.264\ndata\t40.05575588344739\t2017-11-13 10:09:28.208\ndata\t72.36480525594948\t2017-11-13 10:04:59.821\ndata\t69.83860059899277\t2017-11-13 10:05:24.577\ndata\t65.25281152202209\t2017-11-13 10:05:30.105\ndata\t41.750101699579524\t2017-11-13 10:05:33.973\ndata\t61.768390202171446\t2017-11-13 10:07:13.832\ndata\t74.91485776706232\t2017-11-13 10:07:21.971\ndata\t54.46087432609741\t2017-11-13 10:07:25.483\ndata\t50.006272864034415\t2017-11-13 10:07:56.337\ndata\t52.005677411818866\t2017-11-13 10:08:15.464\ndata\t52.431472437551264\t2017-11-13 10:08:23.399\ndata\t45.071832677815365\t2017-11-13 10:08:42.96\nalarms\t96.41912015660265\t2017-11-13 10:09:14.503\nalarms\t83.31258169061407\t2017-11-13 10:05:28.157\ndata\t56.756292205393194\t2017-11-13 10:06:09.393\ndata\t55.20190119505811\t2017-11-13 10:06:12.948\ndata\t63.9952209769352\t2017-11-13 10:06:17.763\ndata\t40.04678292134483\t2017-11-13 10:06:30.238\ndata\t57.75131384991964\t2017-11-13 10:06:48.074\nalarms\t87.11411688671481\t2017-11-13 10:07:11.921\ndata\t53.003172078989536\t2017-11-13 10:07:31.522\nalarms\t83.70315087153448\t2017-11-13 10:07:44.896\ndata\t48.19256884396058\t2017-11-13 10:08:00.171\ndata\t57.738056791100256\t2017-11-13 10:08:37.241\ndata\t43.869697930868504\t2017-11-13 10:08:43.923\nalarms\t85.07365953400931\t2017-11-13 10:05:10.595\nalarms\t94.48406502576955\t2017-11-13 10:06:11.349\ndata\t72.00822293605357\t2017-11-13 10:09:22.16\ndata\t66.9819777274356\t2017-11-13 10:05:10.085\ndata\t68.2556758807569\t2017-11-13 10:05:10.273\nalarms\t96.89136066023211\t2017-11-13 10:06:33.417\ndata\t40.61723150068031\t2017-11-13 10:07:00.321\ndata\t58.31754219037555\t2017-11-13 10:07:42.021\ndata\t51.18111220501497\t2017-11-13 10:08:25.306\nalarms\t96.22445976358561\t2017-11-13 10:05:21.235\ndata\t55.89047698822109\t2017-11-13 10:06:07.798\ndata\t59.333792937711856\t2017-11-13 10:06:22.875\ndata\t50.369446234851566\t2017-11-13 10:06:27.22\ndata\t51.11816941472921\t2017-11-13 10:07:45.971\ndata\t62.4022350735973\t2017-11-13 10:07:52.205\ndata\t70.02102929311998\t2017-11-13 10:08:02.396\ndata\t69.00761605972623\t2017-11-13 10:08:22.134\ndata\t42.73305268059677\t2017-11-13 10:08:59.045\nalarms\t88.6959231957454\t2017-11-13 10:04:58.218\ndata\t69.37535621340055\t2017-11-13 10:05:49.57\nalarms\t91.29680703604548\t2017-11-13 10:05:43.86\nalarms\t80.9820681556848\t2017-11-13 10:06:47.322\ndata\t56.59147854895038\t2017-11-13 10:07:10.004\nalarms\t99.89096170907679\t2017-11-13 10:08:13.038\ndata\t74.69346290019203\t2017-11-13 10:05:03.222\ndata\t70.59704957473242\t2017-11-13 10:05:42.588\ndata\t48.88327566861873\t2017-11-13 10:06:24.829\ndata\t53.43806058540302\t2017-11-13 10:06:35.013\nalarms\t81.02741991435948\t2017-11-13 10:06:57.5\ndata\t68.34954188708434\t2017-11-13 10:07:08.949\ndata\t49.59636280563676\t2017-11-13 10:07:15.106\nalarms\t88.72876783389894\t2017-11-13 10:07:29.941\nalarms\t84.3127896435291\t2017-11-13 10:09:19.247\ndata\t73.47337282849394\t2017-11-13 10:05:00.417\nalarms\t98.14949579048329\t2017-11-13 10:06:54.11\ndata\t40.91254559363293\t2017-11-13 10:07:14.996\nalarms\t91.62616647150574\t2017-11-13 10:07:24.847\ndata\t62.158748015748365\t2017-11-13 10:07:48.388\nalarms\t94.19504806048056\t2017-11-13 10:09:00.958\nalarms\t96.02243146653876\t2017-11-13 10:09:03.182\ndata\t70.96700345457911\t2017-11-13 10:04:55.672\ndata\t58.040711059579465\t2017-11-13 10:05:39.712\ndata\t55.221844336541025\t2017-11-13 10:05:40.675\ndata\t42.21811507042581\t2017-11-13 10:06:38.515\ndata\t44.53968934139569\t2017-11-13 10:07:18.17\nalarms\t81.8860985054704\t2017-11-13 10:07:48.706\nalarms\t80.52619708265034\t2017-11-13 10:07:49.148\nalarms\t82.48164408823529\t2017-11-13 10:08:12.28\nalarms\t85.74620895731623\t2017-11-13 10:09:12.902\ndata\t60.88487336912466\t2017-11-13 10:09:24.542\ndata\t48.46421555444291\t2017-11-13 10:05:19.964\ndata\t59.94733716682342\t2017-11-13 10:05:34.935\ndata\t55.512791730697366\t2017-11-13 10:05:38.559\ndata\t73.33739110793455\t2017-11-13 10:05:41.634\ndata\t41.29811038327154\t2017-11-13 10:06:34.256\ndata\t41.4318097182607\t2017-11-13 10:06:34.692\ndata\t58.921215833062526\t2017-11-13 10:07:53.593\ndata\t44.15187909095079\t2017-11-13 10:08:07.618\nalarms\t86.41368486623595\t2017-11-13 10:08:21.307\nalarms\t85.84814836249754\t2017-11-13 10:08:37.729\nalarms\t95.41293382803109\t2017-11-13 10:09:14.317\nalarms\t86.28132063039702\t2017-11-13 10:05:21.553\nalarms\t85.36309053079061\t2017-11-13 10:05:44.619\nalarms\t91.70366812042714\t2017-11-13 10:05:45.572\ndata\t73.47336602923073\t2017-11-13 10:06:40.051\ndata\t56.72511060972231\t2017-11-13 10:07:27.198\ndata\t52.42746325295775\t2017-11-13 10:07:41.201\nalarms\t81.65663971517353\t2017-11-13 10:08:05.388\ndata\t72.06753947282233\t2017-11-13 10:08:22.444\ndata\t70.81851742340379\t2017-11-13 10:08:51.077\nalarms\t92.31093146652671\t2017-11-13 10:09:23.704\ndata\t71.08120485884767\t2017-11-13 10:05:47.482\ndata\t61.69209669904171\t2017-11-13 10:06:20.368\ndata\t52.482083075136195\t2017-11-13 10:06:45.517\ndata\t71.9313046989997\t2017-11-13 10:07:10.323\ndata\t63.72162269497824\t2017-11-13 10:07:39.79\ndata\t70.66213191855144\t2017-11-13 10:08:18.325\nalarms\t90.99905313663959\t2017-11-13 10:08:33.906\ndata\t56.00143441861214\t2017-11-13 10:08:58.874\nalarms\t89.1333262218615\t2017-11-13 10:05:00.138\ndata\t45.17848517338855\t2017-11-13 10:05:59.132\nalarms\t85.90440218226972\t2017-11-13 10:06:05.241\ndata\t55.0332817896277\t2017-11-13 10:06:06.193\ndata\t74.52092183960309\t2017-11-13 10:06:40.417\ndata\t41.57012435489228\t2017-11-13 10:06:46.957\nalarms\t92.80239950446416\t2017-11-13 10:06:49.652\nalarms\t83.35815964058372\t2017-11-13 10:07:12.24\nalarms\t81.53581311243651\t2017-11-13 10:08:25.452\nalarms\t82.96804623354052\t2017-11-13 10:09:06.049\nalarms\t97.23073262868336\t2017-11-13 10:04:56.95\ndata\t43.98384385148944\t2017-11-13 10:05:14.734\nalarms\t84.78319790970774\t2017-11-13 10:05:16.965\nalarms\t97.17562809472935\t2017-11-13 10:05:21.76\nalarms\t89.13967812317298\t2017-11-13 10:05:57.324\ndata\t52.62485461019107\t2017-11-13 10:06:36.479\nalarms\t89.18006405259848\t2017-11-13 10:06:38.706\ndata\t74.81019064343452\t2017-11-13 10:06:44.24\ndata\t69.32725023763848\t2017-11-13 10:07:01.424\ndata\t50.91544649564901\t2017-11-13 10:07:39.607\ndata\t54.00013850798157\t2017-11-13 10:05:57.811\ndata\t53.56121258813692\t2017-11-13 10:06:41.251\ndata\t66.09413639061692\t2017-11-13 10:07:00.688\ndata\t74.45363899047697\t2017-11-13 10:07:16.378\ndata\t46.27340355626475\t2017-11-13 10:07:20.183\ndata\t50.75609033491486\t2017-11-13 10:08:40.735\ndata\t61.59290033959941\t2017-11-13 10:08:41.371\ndata\t73.98734926329524\t2017-11-13 10:08:54.43\nalarms\t98.24706187440938\t2017-11-13 10:09:17.801\ndata\t66.58753197662006\t2017-11-13 10:05:11.553\ndata\t72.79631636071466\t2017-11-13 10:05:11.869\ndata\t49.107160222763284\t2017-11-13 10:05:22.858\ndata\t68.36890449441375\t2017-11-13 10:05:26.677\nalarms\t93.82749226892739\t2017-11-13 10:06:07.518\nalarms\t90.7029409140111\t2017-11-13 10:06:15.087\ndata\t70.30125140763985\t2017-11-13 10:06:20.043\ndata\t61.390238389871314\t2017-11-13 10:07:12.558\ndata\t44.77623541859663\t2017-11-13 10:07:28.468\nalarms\t86.7224224951038\t2017-11-13 10:07:58.061\nalarms\t99.72430141420053\t2017-11-13 10:08:04.313\nalarms\t89.6469862327097\t2017-11-13 10:08:32.102\ndata\t55.418440942904844\t2017-11-13 10:06:43.497\ndata\t44.060637979265714\t2017-11-13 10:06:52.399\ndata\t45.73699291739628\t2017-11-13 10:06:53.98\ndata\t56.322923959849845\t2017-11-13 10:07:35.791\ndata\t69.41638633346346\t2017-11-13 10:08:18.641\nalarms\t99.85714736252109\t2017-11-13 10:08:50.759\ndata\t59.01753103616332\t2017-11-13 10:08:59.192\nalarms\t83.93221948519397\t2017-11-13 10:09:03.675\ndata\t46.92446758698464\t2017-11-13 10:09:04.777\ndata\t74.24292453807837\t2017-11-13 10:09:25.822\ndata\t46.14013516517734\t2017-11-13 10:05:29.266\ndata\t47.034456584337235\t2017-11-13 10:06:37.752\ndata\t74.42955939403936\t2017-11-13 10:06:50.928\ndata\t71.55892629404973\t2017-11-13 10:08:03.492\ndata\t63.22780635932832\t2017-11-13 10:08:36.085\nalarms\t96.80130529142875\t2017-11-13 10:08:59.997\ndata\t69.82357740098863\t2017-11-13 10:08:54.908\nalarms\t84.16012168449836\t2017-11-13 10:09:08.273\ndata\t41.3424196484237\t2017-11-13 10:05:13.14\ndata\t67.44191954129717\t2017-11-13 10:05:40.995\ndata\t40.69176623464266\t2017-11-13 10:05:44.812\ndata\t62.9822086308723\t2017-11-13 10:06:51.885\nalarms\t95.42793192414864\t2017-11-13 10:06:57.181\ndata\t62.80690775861046\t2017-11-13 10:09:25.342\ndata\t44.589065715454076\t2017-11-13 10:05:13.286\ndata\t58.23636640771206\t2017-11-13 10:05:35.574\ndata\t42.09692587948859\t2017-11-13 10:06:41.369\ndata\t54.68910160660896\t2017-11-13 10:07:07.355\nalarms\t86.85694995002221\t2017-11-13 10:07:19.12\ndata\t71.59883126141452\t2017-11-13 10:07:27.514\ndata\t70.13196206896205\t2017-11-13 10:07:30.568\ndata\t50.798363254444475\t2017-11-13 10:07:41.704\nalarms\t80.42253180820627\t2017-11-13 10:07:43.75\ndata\t70.52160775137577\t2017-11-13 10:07:55.384\nalarms\t81.07350714936076\t2017-11-13 10:09:05.265\nalarms\t81.28417389087132\t2017-11-13 10:05:26.032\ndata\t70.77192331653818\t2017-11-13 10:06:34.574\ndata\t42.44726753426666\t2017-11-13 10:08:05.275\nalarms\t87.28544592487354\t2017-11-13 10:08:45.192\nalarms\t90.14214678275279\t2017-11-13 10:09:00.488\nalarms\t92.701030911723\t2017-11-13 10:09:22.793\ndata\t52.69467904770987\t2017-11-13 10:04:51.485\ndata\t53.80708899765323\t2017-11-13 10:05:24.761\nalarms\t84.96854772619061\t2017-11-13 10:06:16.408\ndata\t55.7799641997223\t2017-11-13 10:06:31.716\ndata\t48.86119383007806\t2017-11-13 10:07:13.408\ndata\t49.03826096198047\t2017-11-13 10:07:24.207\ndata\t46.23063615767473\t2017-11-13 10:07:35.653\ndata\t49.93786878037726\t2017-11-13 10:08:24.351\ndata\t66.13891989626568\t2017-11-13 10:05:20.797\ndata\t57.090137963195275\t2017-11-13 10:05:43.224\nalarms\t96.08597955379983\t2017-11-13 10:05:50.523\ndata\t59.20708455975909\t2017-11-13 10:07:21.335\ndata\t74.19916009243063\t2017-11-13 10:08:33.418\nalarms\t83.34978553134357\t2017-11-13 10:08:45.039\nalarms\t82.65501602349575\t2017-11-13 10:08:49.331\nalarms\t82.30197941653036\t2017-11-13 10:08:56.18\ndata\t63.05701737565113\t2017-11-13 10:09:17.693\ndata\t62.003239571443245\t2017-11-13 10:05:29.124\nalarms\t88.98168804462854\t2017-11-13 10:06:13.597\ndata\t44.286442033804654\t2017-11-13 10:06:12.888\ndata\t62.91477023238738\t2017-11-13 10:06:57.243\nalarms\t82.20927058865854\t2017-11-13 10:06:58.56\ndata\t47.30285204652593\t2017-11-13 10:08:17.01\ndata\t43.237267198754274\t2017-11-13 10:05:01.58\ndata\t46.75483459147605\t2017-11-13 10:05:37.916\ndata\t53.529284300293384\t2017-11-13 10:05:59.777\nalarms\t92.29865863607175\t2017-11-13 10:06:14.803\nalarms\t81.11513707931921\t2017-11-13 10:06:45.09\nalarms\t95.95281484012574\t2017-11-13 10:07:18.913\ndata\t72.71890140477304\t2017-11-13 10:07:15.313\ndata\t61.832427624730556\t2017-11-13 10:07:33.744\ndata\t60.552469246518\t2017-11-13 10:07:36.611\ndata\t65.87245017768089\t2017-11-13 10:07:37.244\ndata\t44.29545899465401\t2017-11-13 10:07:38.017\nalarms\t86.03930441487321\t2017-11-13 10:08:00.488\ndata\t66.41276365937819\t2017-11-13 10:09:11.945\ndata\t71.14022562766519\t2017-11-13 10:09:14.823\nalarms\t87.03628080248352\t2017-11-13 10:05:10.728\nalarms\t98.02359830794384\t2017-11-13 10:05:31.535\ndata\t48.24789319253048\t2017-11-13 10:06:06.248\ndata\t62.52805671731467\t2017-11-13 10:06:08.476\nalarms\t88.74613474837443\t2017-11-13 10:07:16.695\ndata\t45.28343474812596\t2017-11-13 10:08:34.226\ndata\t41.471278053195604\t2017-11-13 10:05:55.302\ndata\t70.57455355301212\t2017-11-13 10:07:14.043\nalarms\t97.6885495451315\t2017-11-13 10:07:25.805\nalarms\t83.53403317629224\t2017-11-13 10:07:34.379\nalarms\t91.58313432721401\t2017-11-13 10:07:45.661\ndata\t54.98974687170304\t2017-11-13 10:08:03.358\ndata\t69.95754451165594\t2017-11-13 10:08:20.354\ndata\t43.86417064355403\t2017-11-13 10:09:16.738\ndata\t66.1019037593046\t2017-11-13 10:09:22.308\ndata\t70.02504921916804\t2017-11-13 10:09:27.73\ndata\t70.67193873575843\t2017-11-13 10:05:47.798\ndata\t65.11029404122712\t2017-11-13 10:05:59.871\nalarms\t92.8170318452766\t2017-11-13 10:08:17.809\ndata\t56.922397154105454\t2017-11-13 10:04:59.392\nalarms\t90.61369442922903\t2017-11-13 10:05:52.251\nalarms\t86.32464310759927\t2017-11-13 10:06:39.662\nalarms\t90.2842270778085\t2017-11-13 10:08:01.577\ndata\t42.295623165156506\t2017-11-13 10:08:18.126\ndata\t52.25961798060894\t2017-11-13 10:05:15.373\nalarms\t94.31401717500778\t2017-11-13 10:05:32.378\ndata\t48.634957026959846\t2017-11-13 10:05:42.268\nalarms\t98.01120205894009\t2017-11-13 10:05:50.66\nalarms\t90.4040901448177\t2017-11-13 10:06:28.542\nalarms\t87.66614671184004\t2017-11-13 10:07:01.639\nalarms\t94.61496915788672\t2017-11-13 10:07:10.643\nalarms\t86.24088558918811\t2017-11-13 10:07:16.057\ndata\t50.741843796574\t2017-11-13 10:07:26.563\ndata\t54.754316362016056\t2017-11-13 10:07:57.257\ndata\t61.24931743019326\t2017-11-13 10:08:07.18\ndata\t73.81878408340256\t2017-11-13 10:09:16.531\ndata\t60.6155121579099\t2017-11-13 10:04:53.304\ndata\t62.05353175733435\t2017-11-13 10:05:47.302\ndata\t57.15448277650823\t2017-11-13 10:06:00.094\ndata\t61.64204856167238\t2017-11-13 10:06:03.956\ndata\t40.42065115818315\t2017-11-13 10:06:33.938\nalarms\t80.5082647196438\t2017-11-13 10:07:29.42\ndata\t40.598237738910505\t2017-11-13 10:08:28.634\ndata\t42.22593250661004\t2017-11-13 10:04:59.71\ndata\t57.31773845392556\t2017-11-13 10:05:23.81\nalarms\t94.4919580540255\t2017-11-13 10:05:23.035\ndata\t46.99497626047727\t2017-11-13 10:05:36.216\ndata\t51.54969781609198\t2017-11-13 10:06:51.126\ndata\t44.02933627298566\t2017-11-13 10:07:05.509\ndata\t51.92203673353186\t2017-11-13 10:07:25.606\ndata\t45.2197813790556\t2017-11-13 10:07:31.331\nalarms\t94.09511756766354\t2017-11-13 10:07:41.386\ndata\t43.90396700854207\t2017-11-13 10:07:51.888\nalarms\t85.58796698746141\t2017-11-13 10:08:26.73\ndata\t68.38612965227922\t2017-11-13 10:09:18.974\ndata\t72.74483922588423\t2017-11-13 10:05:06.235\ndata\t40.25260298826741\t2017-11-13 10:06:05.558\nalarms\t94.4657711943444\t2017-11-13 10:06:23.239\nalarms\t84.30513033612917\t2017-11-13 10:06:39.024\ndata\t52.82588113325768\t2017-11-13 10:07:51.326\ndata\t58.014283965885255\t2017-11-13 10:08:00.939\ndata\t52.309847841254964\t2017-11-13 10:08:05.863\ndata\t56.805315220491835\t2017-11-13 10:08:12.6\ndata\t52.1017582254585\t2017-11-13 10:08:23.671\ndata\t74.21720987608441\t2017-11-13 10:08:38.827\ndata\t61.31923016664877\t2017-11-13 10:08:53.474\ndata\t64.93591478205525\t2017-11-13 10:08:54.261\nalarms\t86.68376837691258\t2017-11-13 10:09:15.58\nalarms\t96.69063278411775\t2017-11-13 10:04:55.249\ndata\t73.13704952145115\t2017-11-13 10:05:24.306\nalarms\t82.97974135550699\t2017-11-13 10:06:03.075\nalarms\t86.26474824368577\t2017-11-13 10:06:29.288\ndata\t71.161951023061\t2017-11-13 10:07:07.151\ndata\t62.4606431579927\t2017-11-13 10:07:24.642\nalarms\t95.27480995018723\t2017-11-13 10:07:43.115\nalarms\t86.70675345048195\t2017-11-13 10:08:01.257\nalarms\t88.899458223075\t2017-11-13 10:08:14.949\ndata\t61.697220577789544\t2017-11-13 10:08:34.86\ndata\t46.30417096509697\t2017-11-13 10:09:05.583\nalarms\t86.28905670109788\t2017-11-13 10:05:22.493\ndata\t57.52873922489728\t2017-11-13 10:05:45.138\nalarms\t85.87677504429793\t2017-11-13 10:05:49.253\nalarms\t99.13456506542065\t2017-11-13 10:06:03.394\ndata\t45.391926653867245\t2017-11-13 10:06:44.555\ndata\t65.54388809865532\t2017-11-13 10:07:09.586\ndata\t64.63388679288914\t2017-11-13 10:07:35.016\ndata\t71.9517680894061\t2017-11-13 10:07:36.291\ndata\t67.53495109745253\t2017-11-13 10:08:48.21\ndata\t61.693500826647835\t2017-11-13 10:09:00.275\nalarms\t91.27084141630621\t2017-11-13 10:09:25.023\nalarms\t92.54973748974851\t2017-11-13 10:05:33.648\nalarms\t91.2903042416741\t2017-11-13 10:07:25.922\nalarms\t81.90015968756511\t2017-11-13 10:08:52.156\nalarms\t91.7599918471296\t2017-11-13 10:05:53.837\nalarms\t81.86634110768831\t2017-11-13 10:05:54.026\nalarms\t90.63767222851538\t2017-11-13 10:05:56.055\ndata\t47.91037577598285\t2017-11-13 10:05:50.842\nalarms\t80.1232182999129\t2017-11-13 10:06:04.288\nalarms\t80.48483209270543\t2017-11-13 10:06:11.616\ndata\t72.64409084252276\t2017-11-13 10:06:11.297\ndata\t54.716079200767894\t2017-11-13 10:06:59.195\ndata\t66.75398607231836\t2017-11-13 10:07:28.787\ndata\t71.51435361324415\t2017-11-13 10:07:52.644\ndata\t45.62439344137507\t2017-11-13 10:08:49.807\nalarms\t82.24702186595295\t2017-11-13 10:09:24.862\nalarms\t80.74278011710767\t2017-11-13 10:04:55.034\nalarms\t94.14121818641917\t2017-11-13 10:05:05.748\nalarms\t98.90232259356797\t2017-11-13 10:05:57.531\nalarms\t95.00431038237716\t2017-11-13 10:06:24.512\ndata\t44.64273811026401\t2017-11-13 10:06:32.466\ndata\t65.13430454258179\t2017-11-13 10:08:19.67\nalarms\t87.3376727157658\t2017-11-13 10:08:45.51\ndata\t64.99673155519179\t2017-11-13 10:07:42.985\ndata\t73.49274207960532\t2017-11-13 10:08:51.558\ndata\t49.72113255151382\t2017-11-13 10:08:53.939\ndata\t54.284734338303544\t2017-11-13 10:08:55.692\ndata\t41.44140315845438\t2017-11-13 10:08:55.498\ndata\t57.758173451986906\t2017-11-13 10:09:16.416\ndata\t68.9896995903734\t2017-11-13 10:05:14.416\nalarms\t91.50377744060239\t2017-11-13 10:05:31.095\nalarms\t98.68186723996949\t2017-11-13 10:05:32.17\nalarms\t87.55271943071344\t2017-11-13 10:05:35.255\ndata\t41.392790248105584\t2017-11-13 10:05:49.707\ndata\t43.45757477404373\t2017-11-13 10:06:14.604\nalarms\t97.63606490270143\t2017-11-13 10:07:48.071\ndata\t69.91705793100961\t2017-11-13 10:08:08.256\ndata\t66.49998804363669\t2017-11-13 10:08:39.318\ndata\t55.111129870620566\t2017-11-13 10:09:00.154\nalarms\t85.28118469021878\t2017-11-13 10:04:52.139\ndata\t57.00167677886874\t2017-11-13 10:04:56.202\ndata\t59.07115523642523\t2017-11-13 10:05:33.128\nalarms\t86.75560298135329\t2017-11-13 10:06:55.532\ndata\t42.2810147658714\t2017-11-13 10:07:17.646\ndata\t55.816682372655706\t2017-11-13 10:07:32.293\nalarms\t88.8372332122032\t2017-11-13 10:07:48.831\ndata\t61.201095149036234\t2017-11-13 10:08:30.874\ndata\t52.47765157386618\t2017-11-13 10:08:34.639\ndata\t58.343197692914345\t2017-11-13 10:05:18.57\ndata\t40.236501946489135\t2017-11-13 10:06:07.199\ndata\t73.42498111005577\t2017-11-13 10:07:45.853\nalarms\t93.40125921900092\t2017-11-13 10:08:03.036\nalarms\t81.75476466504966\t2017-11-13 10:08:22.261\ndata\t54.43719436859899\t2017-11-13 10:08:26.41\nalarms\t98.3617033840041\t2017-11-13 10:09:05.411\nalarms\t92.25628791896935\t2017-11-13 10:09:13.042\ndata\t68.05221066285726\t2017-11-13 10:04:56.9\ndata\t60.988732086923406\t2017-11-13 10:05:33.332\ndata\t58.059211763567674\t2017-11-13 10:05:33.78\nalarms\t83.96856851734984\t2017-11-13 10:05:40.348\ndata\t42.9450789490457\t2017-11-13 10:06:11.029\ndata\t61.03295929922581\t2017-11-13 10:06:32.673\ndata\t64.22614622908152\t2017-11-13 10:07:04.813\nalarms\t95.38676298247574\t2017-11-13 10:07:42.661\ndata\t42.954289901088686\t2017-11-13 10:08:19.712\ndata\t56.495275591009786\t2017-11-13 10:08:21.944\nalarms\t99.18376507161274\t2017-11-13 10:08:44.721\ndata\t44.73622699773438\t2017-11-13 10:05:26.862\ndata\t63.96810930136718\t2017-11-13 10:06:46.688\nalarms\t92.16178960714002\t2017-11-13 10:06:47.437\ndata\t53.59354775429152\t2017-11-13 10:07:20.39\ndata\t58.40757882941852\t2017-11-13 10:07:23.252\ndata\t43.67370613182656\t2017-11-13 10:08:28.951\nalarms\t98.21657612836509\t2017-11-13 10:08:39.272\nalarms\t92.16572252772397\t2017-11-13 10:09:12.587\ndata\t47.26833306192768\t2017-11-13 10:09:27.408\nalarms\t82.73715363430269\t2017-11-13 10:04:56.837\ndata\t51.5878306399232\t2017-11-13 10:04:54.714\ndata\t65.04489180144222\t2017-11-13 10:05:27.831\ndata\t60.548769690265274\t2017-11-13 10:05:31.417\ndata\t56.684260397041086\t2017-11-13 10:05:33.297\nalarms\t86.13625656713815\t2017-11-13 10:05:40.472\nalarms\t91.90165359983064\t2017-11-13 10:07:54.424\nalarms\t86.13994315920742\t2017-11-13 10:08:09.218\nalarms\t92.70574869564763\t2017-11-13 10:08:09.534\nalarms\t96.19700377728918\t2017-11-13 10:08:28.167\nalarms\t86.49801388602074\t2017-11-13 10:08:31.512\ndata\t64.41372615034223\t2017-11-13 10:08:38.508\ndata\t61.312375990348826\t2017-11-13 10:08:49.972\nalarms\t86.7846079824905\t2017-11-13 10:08:56.646\ndata\t55.54543240676843\t2017-11-13 10:09:13.361\ndata\t46.221941707997416\t2017-11-13 10:06:01.149\ndata\t50.868795591719035\t2017-11-13 10:06:07.152\nalarms\t80.56364714851057\t2017-11-13 10:06:25.016\ndata\t64.8209529590562\t2017-11-13 10:06:50.607\ndata\t50.21638170766742\t2017-11-13 10:07:48.197\nalarms\t95.85488710862461\t2017-11-13 10:07:53.789\nalarms\t83.58378581958745\t2017-11-13 10:08:36.131\nalarms\t95.54197406083897\t2017-11-13 10:09:10.811\ndata\t64.03098735054402\t2017-11-13 10:06:19.596\ndata\t51.08812062775792\t2017-11-13 10:06:23.063\ndata\t62.34708644082039\t2017-11-13 10:06:30.761\nalarms\t89.17516219236063\t2017-11-13 10:06:36.603\ndata\t64.2211908397985\t2017-11-13 10:06:43.179\nalarms\t98.40104807916109\t2017-11-13 10:07:22.092\ndata\t56.27329463698261\t2017-11-13 10:08:26.896\ndata\t60.52967281294005\t2017-11-13 10:09:08.12\nalarms\t91.66559059528305\t2017-11-13 10:05:03.546\nalarms\t91.83334830912315\t2017-11-13 10:05:04.297\ndata\t71.36153771328395\t2017-11-13 10:05:17.285\ndata\t71.40468179047625\t2017-11-13 10:06:02.359\ndata\t67.56089362518233\t2017-11-13 10:06:15.529\ndata\t53.40859880359785\t2017-11-13 10:06:42.321\ndata\t49.85115577459046\t2017-11-13 10:06:45.725\ndata\t74.03543537235326\t2017-11-13 10:06:53.023\ndata\t41.6157339949557\t2017-11-13 10:07:46.6\nalarms\t93.76599987804575\t2017-11-13 10:08:14.829\nalarms\t89.50555486872777\t2017-11-13 10:08:41.053\ndata\t62.07800171232266\t2017-11-13 10:08:44.406\nalarms\t89.14440855691753\t2017-11-13 10:08:57.278\nalarms\t91.22057943015518\t2017-11-13 10:08:59.829\ndata\t46.64610637835089\t2017-11-13 10:09:01.45\nalarms\t88.78803562155811\t2017-11-13 10:05:29.914\ndata\t50.492764125365724\t2017-11-13 10:05:33.454\ndata\t50.787015205955704\t2017-11-13 10:05:37.597\ndata\t52.46755219671182\t2017-11-13 10:06:14.769\ndata\t73.14600509335078\t2017-11-13 10:06:36.797\ndata\t71.72523619039023\t2017-11-13 10:06:46.367\nalarms\t91.63356469715075\t2017-11-13 10:06:43.272\ndata\t66.64456329538577\t2017-11-13 10:07:14.677\ndata\t40.058147291191375\t2017-11-13 10:07:39.471\ndata\t64.0812739617358\t2017-11-13 10:08:13.676\ndata\t58.12320488923264\t2017-11-13 10:08:29.441\nalarms\t93.27825857819288\t2017-11-13 10:08:39.781\nalarms\t89.91267213798923\t2017-11-13 10:09:09.717\ndata\t60.970009157387864\t2017-11-13 10:05:42.391\ndata\t45.39158575902656\t2017-11-13 10:06:40.1\ndata\t48.85355478656111\t2017-11-13 10:07:03.01\ndata\t43.49587247735949\t2017-11-13 10:07:45.342\ndata\t63.755297422108974\t2017-11-13 10:08:01.901\ndata\t43.873920270767314\t2017-11-13 10:08:50.607\nalarms\t88.09902930119\t2017-11-13 10:09:13.995\nalarms\t89.78575617275402\t2017-11-13 10:09:28.845\nalarms\t99.21537463439654\t2017-11-13 10:05:16.646\ndata\t58.511545881918146\t2017-11-13 10:06:21.004\ndata\t72.88692328583973\t2017-11-13 10:07:01.106\nalarms\t94.577902041642\t2017-11-13 10:07:21.137\nalarms\t95.38318303549116\t2017-11-13 10:07:59.015\ndata\t54.21670958688963\t2017-11-13 10:07:56.021\ndata\t43.00651482114138\t2017-11-13 10:08:07.3\nalarms\t80.71188690574682\t2017-11-13 10:08:07.936\ndata\t48.100691702747326\t2017-11-13 10:08:55.058\ndata\t63.970047415269875\t2017-11-13 10:09:10.672\ndata\t59.720113133872246\t2017-11-13 10:09:16.097\ndata\t56.42692349424894\t2017-11-13 10:06:52.2\ndata\t61.62977274710177\t2017-11-13 10:07:12.726\nalarms\t89.82113112162581\t2017-11-13 10:07:59.539\ndata\t59.343325618859495\t2017-11-13 10:08:29.593\ndata\t41.5734798310755\t2017-11-13 10:09:00.808\n\u003c!--TABLE_COMMENT--\u003e\n\u003cfont color\u003dred\u003eResults are limited by 1000.\u003c/font\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1510323035629_-1680369487",
+      "id": "20171110-141035_1162281259",
+      "dateCreated": "Nov 10, 2017 2:10:35 PM",
+      "dateStarted": "Nov 13, 2017 9:09:37 AM",
+      "dateFinished": "Nov 13, 2017 9:09:40 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "query.stop()",
+      "user": "anonymous",
+      "dateUpdated": "Nov 14, 2017 8:39:39 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "text",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/text"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "jobName": "paragraph_1510321811290_603012376",
+      "id": "20171110-135011_1861851427",
+      "dateCreated": "Nov 10, 2017 1:50:11 PM",
+      "dateStarted": "Nov 14, 2017 8:39:39 AM",
+      "dateFinished": "Nov 14, 2017 8:39:41 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Watermarked aggregation",
+      "text": "%spark\r\nimport org.apache.spark.sql.streaming._\r\nimport scala.concurrent.duration._\r\n    val query\u003dspark\r\n      .readStream\r\n      .format(\"kafka\")\r\n      .option(\"kafka.bootstrap.servers\", \"192.168.99.100:9092\")\r\n      .option(\"subscribe\", \"alarms,data\")\r\n      .option(\"group.id\", \"structured-Streaming-demo\")\r\n      .option(\"failOnDataLoss\", true) \r\n      .load()\r\n      .select(col(\"topic\"), from_json(col(\"value\").cast(\"string\"),mySchema).alias(\"parsed_value\"))\r\n      .select(\"parsed_value.*\")\r\n      .withWatermark(\"timestamp\", \"1 minutes\")\r\n      .dropDuplicates(\"machine\",\"timestamp\")\r\n      .groupBy(\"machine\",\"timestamp\")\r\n      .avg(\"humidity\").as(\"AVG Humidity\")\r\n      .writeStream\r\n      .format(\"memory\")\r\n      .queryName(\"test\")\r\n       .outputMode(OutputMode.Complete)\r\n      .trigger(Trigger.ProcessingTime(10.seconds)) //if we do not trigger will start another \u0027batch\u0027 as soon as the job finishes\r\n      .start()\r\n",
+      "user": "anonymous",
+      "dateUpdated": "Nov 14, 2017 8:38:54 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "text",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/text",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.sql.streaming._\nimport scala.concurrent.duration._\nquery: org.apache.spark.sql.streaming.StreamingQuery \u003d org.apache.spark.sql.execution.streaming.StreamingQueryWrapper@73e02145\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1510322862860_-840491642",
+      "id": "20171110-140742_959649620",
+      "dateCreated": "Nov 10, 2017 2:07:42 PM",
+      "dateStarted": "Nov 14, 2017 8:38:54 AM",
+      "dateFinished": "Nov 14, 2017 8:38:58 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql \nselect * from test",
+      "user": "anonymous",
+      "dateUpdated": "Nov 14, 2017 8:39:28 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "text",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/text"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "machine\ttimestamp\tavg(humidity)\nMACHINE2\t2017-11-14 09:40:31.061\t50.976596002608616\nMACHINE2\t2017-11-14 09:40:43.611\t97.93590021587633\nMACHINE2\t2017-11-14 09:40:36.103\t74.48987553268324\nMACHINE2\t2017-11-14 09:40:31.373\t89.89061307009051\nMACHINE2\t2017-11-14 09:40:30.751\t71.13325313368033\nMACHINE1\t2017-11-14 09:40:39.25\t46.927057640376624\nMACHINE1\t2017-11-14 09:40:37.987\t69.97280885905568\nMACHINE1\t2017-11-14 09:40:37.672\t99.14079901425147\nMACHINE2\t2017-11-14 09:40:33.578\t54.839939834694334\nMACHINE1\t2017-11-14 09:40:38.928\t67.00532096133871\nMACHINE2\t2017-11-14 09:40:36.728\t99.03177866057754\nMACHINE2\t2017-11-14 09:40:34.51\t68.0079834337017\nMACHINE2\t2017-11-14 09:40:34.199\t46.017939895425094\nMACHINE1\t2017-11-14 09:40:29.432\t73.8211897525746\nMACHINE1\t2017-11-14 09:40:34.515\t81.68282350591828\nMACHINE2\t2017-11-14 09:40:41.735\t53.94911004235432\nMACHINE2\t2017-11-14 09:40:42.044\t89.11816478691469\nMACHINE1\t2017-11-14 09:40:40.492\t91.69924976792181\nMACHINE2\t2017-11-14 09:40:30.125\t64.57188301479998\nMACHINE2\t2017-11-14 09:40:38.296\t65.69129805592877\nMACHINE1\t2017-11-14 09:40:35.142\t72.91797714206763\nMACHINE1\t2017-11-14 09:40:42.374\t66.85458983052816\nMACHINE2\t2017-11-14 09:40:29.811\t45.833671251871614\nMACHINE1\t2017-11-14 09:40:36.107\t57.81246354874449\nMACHINE2\t2017-11-14 09:40:33.263\t57.87530629315146\nMACHINE1\t2017-11-14 09:40:33.584\t83.6769966415002\nMACHINE1\t2017-11-14 09:40:41.433\t50.36171292595517\nMACHINE1\t2017-11-14 09:40:32.621\t72.03393579408291\nMACHINE2\t2017-11-14 09:40:37.675\t40.24774647198407\nMACHINE1\t2017-11-14 09:40:33.264\t68.76710748703144\nMACHINE1\t2017-11-14 09:40:39.56\t93.620602427035\nMACHINE1\t2017-11-14 09:40:31.372\t57.80057287378081\nMACHINE1\t2017-11-14 09:40:40.803\t80.52051638717343\nMACHINE1\t2017-11-14 09:40:34.204\t50.98954495205279\nMACHINE1\t2017-11-14 09:40:42.057\t81.05631394212966\nMACHINE1\t2017-11-14 09:40:32.31\t85.1449328269604\nMACHINE2\t2017-11-14 09:40:42.99\t66.79155925456793\nMACHINE1\t2017-11-14 09:40:41.121\t64.02803841205593\nMACHINE1\t2017-11-14 09:40:33.894\t58.85601222566305\nMACHINE2\t2017-11-14 09:40:33.888\t60.38780243042865\nMACHINE2\t2017-11-14 09:40:35.79\t47.20064905023381\nMACHINE2\t2017-11-14 09:40:39.243\t65.6666256909881\nMACHINE2\t2017-11-14 09:40:43.922\t94.5657220897633\nMACHINE1\t2017-11-14 09:40:38.618\t47.03306839777613\nMACHINE2\t2017-11-14 09:40:40.799\t73.26772425096422\nMACHINE1\t2017-11-14 09:40:34.827\t46.4196418464007\nMACHINE2\t2017-11-14 09:40:36.415\t57.08452722597547\nMACHINE1\t2017-11-14 09:40:31.683\t60.10612779070477\nMACHINE2\t2017-11-14 09:40:41.114\t47.13113325536782\nMACHINE1\t2017-11-14 09:40:42.687\t48.623574556507904\nMACHINE2\t2017-11-14 09:40:41.425\t97.45118789292441\nMACHINE1\t2017-11-14 09:40:35.792\t53.48052491772512\nMACHINE2\t2017-11-14 09:40:32.313\t60.329623578116056\nMACHINE2\t2017-11-14 09:40:35.48\t61.22794785368694\nMACHINE2\t2017-11-14 09:40:32.936\t57.3793386874779\nMACHINE2\t2017-11-14 09:40:44.233\t49.74546478890798\nMACHINE1\t2017-11-14 09:40:37.042\t52.90310728271281\nMACHINE1\t2017-11-14 09:40:43.003\t45.61507760755821\nMACHINE2\t2017-11-14 09:40:42.68\t65.9133980796018\nMACHINE1\t2017-11-14 09:40:31.059\t63.84766368855297\nMACHINE1\t2017-11-14 09:40:36.731\t65.21822721442854\nMACHINE2\t2017-11-14 09:40:42.365\t82.3146376184794\nMACHINE2\t2017-11-14 09:40:38.554\t82.5743827933595\nMACHINE1\t2017-11-14 09:40:37.298\t52.71221279060882\nMACHINE1\t2017-11-14 09:40:43.556\t53.00325976196048\nMACHINE1\t2017-11-14 09:40:37.361\t64.72918897222627\nMACHINE1\t2017-11-14 09:40:41.746\t61.59559917266388\nMACHINE1\t2017-11-14 09:40:43.313\t84.52184443544337\nMACHINE2\t2017-11-14 09:40:34.823\t66.22732460910004\nMACHINE2\t2017-11-14 09:40:38.922\t44.41384255722963\nMACHINE1\t2017-11-14 09:40:43.622\t65.15816359013412\nMACHINE2\t2017-11-14 09:40:37.988\t93.89261980580119\nMACHINE2\t2017-11-14 09:40:44.543\t51.18364257837679\nMACHINE2\t2017-11-14 09:40:32.625\t82.56822545571592\nMACHINE2\t2017-11-14 09:40:43.301\t43.53373734005619\nMACHINE1\t2017-11-14 09:40:44.243\t86.83140072240609\nMACHINE2\t2017-11-14 09:40:35.14\t41.71272877271347\nMACHINE1\t2017-11-14 09:40:39.871\t62.7682679138301\nMACHINE1\t2017-11-14 09:40:29.796\t74.83685042864877\nMACHINE2\t2017-11-14 09:40:39.864\t85.84015247209142\nMACHINE2\t2017-11-14 09:40:37.045\t72.68292373066176\nMACHINE2\t2017-11-14 09:40:38.612\t55.320612981788045\nMACHINE1\t2017-11-14 09:40:43.933\t58.86764559553008\nMACHINE2\t2017-11-14 09:40:36.36\t89.4511935211538\nMACHINE1\t2017-11-14 09:40:40.179\t53.026549496313756\nMACHINE1\t2017-11-14 09:40:30.121\t69.72462208816566\nMACHINE1\t2017-11-14 09:40:35.478\t90.32125564214672\nMACHINE2\t2017-11-14 09:40:40.177\t54.74424165633705\nMACHINE2\t2017-11-14 09:40:40.49\t47.57935405431962\nMACHINE1\t2017-11-14 09:40:31.997\t66.30597292327792\nMACHINE1\t2017-11-14 09:40:36.418\t83.42065039588297\nMACHINE2\t2017-11-14 09:40:32.001\t98.6817266102452\nMACHINE2\t2017-11-14 09:40:30.435\t67.13594869717443\nMACHINE1\t2017-11-14 09:40:32.932\t44.22838671974605\nMACHINE1\t2017-11-14 09:40:30.746\t42.81160652816531\nMACHINE2\t2017-11-14 09:40:31.686\t42.79594750133002\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1510398862027_-1828836205",
+      "id": "20171111-111422_420130920",
+      "dateCreated": "Nov 11, 2017 11:14:22 AM",
+      "dateStarted": "Nov 14, 2017 8:39:28 AM",
+      "dateFinished": "Nov 14, 2017 8:39:29 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Show query progress",
+      "text": "%spark \nquery.lastProgress",
+      "user": "anonymous",
+      "dateUpdated": "Nov 11, 2017 7:38:26 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "res75: org.apache.spark.sql.streaming.StreamingQueryProgress \u003d\n{\n  \"id\" : \"f64e6d75-7e73-4be4-ab7c-4561fc1a19af\",\n  \"runId\" : \"f416b54c-b1d2-4f64-a875-8d86fcc7e71e\",\n  \"name\" : \"count\",\n  \"timestamp\" : \"2017-11-11T19:38:03.260Z\",\n  \"numInputRows\" : 1049,\n  \"inputRowsPerSecond\" : 64.01806420114733,\n  \"processedRowsPerSecond\" : 53.564133986928105,\n  \"durationMs\" : {\n    \"addBatch\" : 19508,\n    \"getBatch\" : 7,\n    \"getOffset\" : 3,\n    \"queryPlanning\" : 18,\n    \"triggerExecution\" : 19584,\n    \"walCommit\" : 46\n  },\n  \"stateOperators\" : [ {\n    \"numRowsTotal\" : 10,\n    \"numRowsUpdated\" : 4\n  } ],\n  \"sources\" : [ {\n    \"description\" : \"KafkaSource[Subscribe[alarms, data]]\",\n    \"startOffset\" : {\n      \"alarms\" : {\n        \"0\" : 29146\n      },\n      \"data\" : {\n        \"0\" : 58124\n      }\n    },..."
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1510399449302_-1390566693",
+      "id": "20171111-112409_240025611",
+      "dateCreated": "Nov 11, 2017 11:24:09 AM",
+      "dateStarted": "Nov 11, 2017 7:38:26 PM",
+      "dateFinished": "Nov 11, 2017 7:38:39 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%spark\nquery.stop()\nwatermarked.stop()",
+      "user": "anonymous",
+      "dateUpdated": "Nov 11, 2017 7:24:58 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "jobName": "paragraph_1510427950098_-400742696",
+      "id": "20171111-191910_1344812173",
+      "dateCreated": "Nov 11, 2017 7:19:10 PM",
+      "dateStarted": "Nov 11, 2017 7:24:58 PM",
+      "dateFinished": "Nov 11, 2017 7:25:12 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Not Watermarked vs Watermarked Count",
+      "text": "%spark\nimport org.apache.spark.sql.streaming._\nimport scala.concurrent.duration._\n    val query\u003dspark\n      .readStream\n      .format(\"kafka\")\n      .option(\"kafka.bootstrap.servers\", \"192.168.99.100:9092\")\n      .option(\"subscribe\", \"alarms,data\")\n      .option(\"group.id\", \"structured-Streaming-demo\")\n      .option(\"failOnDataLoss\", true) \n      .load()\n      .select(col(\"topic\"), from_json(col(\"value\").cast(\"string\"),mySchema).alias(\"parsed_value\"))\n      .select(\"parsed_value.*\")\n      .groupBy(\"machine\")\n      .count()\n      .writeStream\n      .format(\"memory\")\n      .queryName(\"count\")\n       .outputMode(OutputMode.Complete)\n      .trigger(Trigger.ProcessingTime(10.seconds)) //if we do not trigger will start another \u0027batch\u0027 as soon as the job finishes\n      .start()\n      \n       val watermarked\u003dspark\n      .readStream\n      .format(\"kafka\")\n      .option(\"kafka.bootstrap.servers\", \"192.168.99.100:9092\")\n      .option(\"subscribe\", \"alarms,data\")\n      .option(\"group.id\", \"structured-Streaming-demo\")\n      .option(\"failOnDataLoss\", true) \n      .load()\n      .select(col(\"topic\"), from_json(col(\"value\").cast(\"string\"),mySchema).alias(\"parsed_value\"))\n      .select(\"parsed_value.*\")\n      .withWatermark(\"timestamp\", \"1 minutes\")\n      .dropDuplicates(\"machine\",\"timestamp\")\n      .groupBy(\"machine\")\n      .count()\n      .writeStream\n      .format(\"memory\")\n      .queryName(\"watermarked_count\")\n       .outputMode(OutputMode.Complete)\n      .trigger(Trigger.ProcessingTime(10.seconds)) //if we do not trigger will start another \u0027batch\u0027 as soon as the job finishes\n      .start()",
+      "user": "anonymous",
+      "dateUpdated": "Nov 13, 2017 8:54:22 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "text",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/text",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.sql.streaming._\nimport scala.concurrent.duration._\njava.lang.IllegalArgumentException: Cannot start query with name count as a query with that name is already active\n  at org.apache.spark.sql.streaming.StreamingQueryManager$$anonfun$startQuery$1.apply(StreamingQueryManager.scala:293)\n  at org.apache.spark.sql.streaming.StreamingQueryManager$$anonfun$startQuery$1.apply(StreamingQueryManager.scala:291)\n  at scala.Option.foreach(Option.scala:257)\n  at org.apache.spark.sql.streaming.StreamingQueryManager.startQuery(StreamingQueryManager.scala:291)\n  at org.apache.spark.sql.streaming.DataStreamWriter.start(DataStreamWriter.scala:247)\n  ... 205 elided\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1510422293165_1852704850",
+      "id": "20171111-174453_475039801",
+      "dateCreated": "Nov 11, 2017 5:44:53 PM",
+      "dateStarted": "Nov 11, 2017 7:23:25 PM",
+      "dateFinished": "Nov 11, 2017 7:23:48 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql\nSELECT count.machine,count.count, watermarked_count.count as real_count, count.window  FROM count inner join watermarked_count on count.window \u003d watermarked_count.window and count.machine \u003d watermarked_count.machine\n",
+      "user": "anonymous",
+      "dateUpdated": "Nov 14, 2017 8:07:11 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "text",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/text"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "machine\tcount\nMACHINE1\t909\nMACHINE2\t911\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1510427948482_-1071744777",
+      "id": "20171111-191908_1739686941",
+      "dateCreated": "Nov 11, 2017 7:19:08 PM",
+      "dateStarted": "Nov 11, 2017 7:23:41 PM",
+      "dateFinished": "Nov 11, 2017 7:23:48 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql\nselect * from watermarked_count",
+      "user": "anonymous",
+      "dateUpdated": "Nov 11, 2017 7:23:54 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/sql"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "machine\tcount\nMACHINE1\t512\nMACHINE2\t513\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1510428091667_-1490120074",
+      "id": "20171111-192131_680722991",
+      "dateCreated": "Nov 11, 2017 7:21:31 PM",
+      "dateStarted": "Nov 11, 2017 7:23:54 PM",
+      "dateFinished": "Nov 11, 2017 7:23:54 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%spark\nquery.stop()\nwatermarked.stop()",
+      "user": "anonymous",
+      "dateUpdated": "Nov 14, 2017 9:11:50 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "text",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/text"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u003cconsole\u003e:183: error: not found: value watermarked\n       watermarked.stop()\n       ^\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1510428692421_-583245014",
+      "id": "20171111-193132_2039963665",
+      "dateCreated": "Nov 11, 2017 7:31:32 PM",
+      "dateStarted": "Nov 14, 2017 9:11:51 AM",
+      "dateFinished": "Nov 14, 2017 9:11:58 AM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Non Watermarked vs Watermarked Windowed Count Query",
+      "text": "%spark\nimport org.apache.spark.sql.streaming._\nimport scala.concurrent.duration._\n    val query\u003dspark\n      .readStream\n      .format(\"kafka\")\n      .option(\"kafka.bootstrap.servers\", \"192.168.99.100:9092\")\n      .option(\"subscribe\", \"alarms,data\")\n      .option(\"group.id\", \"structured-Streaming-demo\")\n      .option(\"failOnDataLoss\", true) \n      .load()\n      .select(col(\"topic\"), from_json(col(\"value\").cast(\"string\"),mySchema).alias(\"parsed_value\"))\n      .select(\"parsed_value.*\")\n      .groupBy($\"machine\", window($\"timestamp\", \"2 minutes\"))\n      .count()\n      .writeStream\n      .format(\"memory\")\n      .queryName(\"count\")\n       .outputMode(OutputMode.Complete)\n      .trigger(Trigger.ProcessingTime(10.seconds)) //if we do not trigger will start another \u0027batch\u0027 as soon as the job finishes\n      .start()\n      \n       val watermarked\u003dspark\n      .readStream\n      .format(\"kafka\")\n      .option(\"kafka.bootstrap.servers\", \"192.168.99.100:9092\")\n      .option(\"subscribe\", \"alarms,data\")\n      .option(\"group.id\", \"structured-Streaming-demo\")\n      .option(\"failOnDataLoss\", true) \n      .load()\n      .select(col(\"topic\"), from_json(col(\"value\").cast(\"string\"),mySchema).alias(\"parsed_value\"))\n      .select(\"parsed_value.*\")\n      .withWatermark(\"timestamp\", \"1 minutes\")\n      .dropDuplicates(\"machine\",\"timestamp\")\n      .groupBy($\"machine\", window($\"timestamp\", \"2 minutes\"))\n      .count()\n      .writeStream\n      .format(\"memory\")\n      .queryName(\"watermarked_count\")\n       .outputMode(OutputMode.Complete)\n      .trigger(Trigger.ProcessingTime(10.seconds)) //if we do not trigger will start another \u0027batch\u0027 as soon as the job finishes\n      .start()",
+      "user": "anonymous",
+      "dateUpdated": "Nov 13, 2017 9:10:15 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "text",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/text",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.sql.streaming._\nimport scala.concurrent.duration._\nquery: org.apache.spark.sql.streaming.StreamingQuery \u003d org.apache.spark.sql.execution.streaming.StreamingQueryWrapper@3c8ee175\nwatermarked: org.apache.spark.sql.streaming.StreamingQuery \u003d org.apache.spark.sql.execution.streaming.StreamingQueryWrapper@71b660dd\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1510428116783_753548333",
+      "id": "20171111-192156_746777049",
+      "dateCreated": "Nov 11, 2017 7:21:56 PM",
+      "dateStarted": "Nov 13, 2017 8:20:23 AM",
+      "dateFinished": "Nov 13, 2017 8:20:32 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Non Watermarked vs Watermarked Windowed Count ",
+      "text": "%sql\nSELECT count.machine,count.count, watermarked_count.count as real_count, count.window  FROM count inner join watermarked_count on count.window \u003d watermarked_count.window and count.machine \u003d watermarked_count.machine\n",
+      "user": "anonymous",
+      "dateUpdated": "Nov 13, 2017 9:10:22 AM",
+      "config": {
+        "colWidth": 11.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "lineChart",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "lineChart": {}
+              },
+              "commonSetting": {},
+              "keys": [
+                {
+                  "name": "window",
+                  "index": 3.0,
+                  "aggr": "sum"
+                }
+              ],
+              "groups": [
+                {
+                  "name": "machine",
+                  "index": 0.0,
+                  "aggr": "sum"
+                }
+              ],
+              "values": [
+                {
+                  "name": "real_count",
+                  "index": 2.0,
+                  "aggr": "sum"
+                },
+                {
+                  "name": "count",
+                  "index": 1.0,
+                  "aggr": "sum"
+                }
+              ]
+            },
+            "helium": {}
+          }
+        },
+        "editorSetting": {
+          "language": "text",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/text",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "machine\tcount\treal_count\twindow\nMACHINE2\t1064\t541\t[2017-11-13 09:42:00.0,2017-11-13 09:44:00.0]\nMACHINE1\t1068\t543\t[2017-11-13 09:56:00.0,2017-11-13 09:58:00.0]\nMACHINE2\t1066\t540\t[2017-11-13 09:52:00.0,2017-11-13 09:54:00.0]\nMACHINE1\t1117\t567\t[2017-11-13 09:30:00.0,2017-11-13 09:32:00.0]\nMACHINE1\t1071\t542\t[2017-11-13 09:54:00.0,2017-11-13 09:56:00.0]\nMACHINE2\t1069\t541\t[2017-11-13 09:54:00.0,2017-11-13 09:56:00.0]\nMACHINE2\t1106\t562\t[2017-11-13 09:34:00.0,2017-11-13 09:36:00.0]\nMACHINE1\t1070\t542\t[2017-11-13 09:48:00.0,2017-11-13 09:50:00.0]\nMACHINE2\t1070\t543\t[2017-11-13 09:40:00.0,2017-11-13 09:42:00.0]\nMACHINE1\t884\t446\t[2017-11-13 09:58:00.0,2017-11-13 10:00:00.0]\nMACHINE2\t1016\t516\t[2017-11-13 09:22:00.0,2017-11-13 09:24:00.0]\nMACHINE2\t1088\t557\t[2017-11-13 09:36:00.0,2017-11-13 09:38:00.0]\nMACHINE1\t1115\t568\t[2017-11-13 09:32:00.0,2017-11-13 09:34:00.0]\nMACHINE2\t1115\t567\t[2017-11-13 09:24:00.0,2017-11-13 09:26:00.0]\nMACHINE1\t1066\t542\t[2017-11-13 09:52:00.0,2017-11-13 09:54:00.0]\nMACHINE2\t1062\t539\t[2017-11-13 09:58:00.0,2017-11-13 10:00:00.0]\nMACHINE2\t1057\t540\t[2017-11-13 09:44:00.0,2017-11-13 09:46:00.0]\nMACHINE2\t1072\t544\t[2017-11-13 09:56:00.0,2017-11-13 09:58:00.0]\nMACHINE2\t1066\t541\t[2017-11-13 09:38:00.0,2017-11-13 09:40:00.0]\nMACHINE1\t1062\t539\t[2017-11-13 09:42:00.0,2017-11-13 09:44:00.0]\nMACHINE2\t1067\t542\t[2017-11-13 09:46:00.0,2017-11-13 09:48:00.0]\nMACHINE1\t1008\t518\t[2017-11-13 09:22:00.0,2017-11-13 09:24:00.0]\nMACHINE2\t946\t446\t[2017-11-13 10:00:00.0,2017-11-13 10:02:00.0]\nMACHINE1\t1117\t568\t[2017-11-13 09:26:00.0,2017-11-13 09:28:00.0]\nMACHINE1\t1055\t539\t[2017-11-13 09:50:00.0,2017-11-13 09:52:00.0]\nMACHINE1\t1101\t567\t[2017-11-13 09:28:00.0,2017-11-13 09:30:00.0]\nMACHINE1\t1109\t564\t[2017-11-13 09:34:00.0,2017-11-13 09:36:00.0]\nMACHINE1\t1066\t543\t[2017-11-13 09:40:00.0,2017-11-13 09:42:00.0]\nMACHINE1\t1067\t542\t[2017-11-13 09:46:00.0,2017-11-13 09:48:00.0]\nMACHINE1\t1057\t541\t[2017-11-13 09:44:00.0,2017-11-13 09:46:00.0]\nMACHINE2\t1070\t542\t[2017-11-13 09:48:00.0,2017-11-13 09:50:00.0]\nMACHINE1\t1114\t566\t[2017-11-13 09:24:00.0,2017-11-13 09:26:00.0]\nMACHINE2\t1122\t569\t[2017-11-13 09:32:00.0,2017-11-13 09:34:00.0]\nMACHINE2\t1110\t568\t[2017-11-13 09:26:00.0,2017-11-13 09:28:00.0]\nMACHINE2\t1113\t568\t[2017-11-13 09:28:00.0,2017-11-13 09:30:00.0]\nMACHINE1\t1069\t543\t[2017-11-13 09:38:00.0,2017-11-13 09:40:00.0]\nMACHINE2\t1111\t567\t[2017-11-13 09:30:00.0,2017-11-13 09:32:00.0]\nMACHINE2\t1054\t540\t[2017-11-13 09:50:00.0,2017-11-13 09:52:00.0]\nMACHINE1\t1093\t556\t[2017-11-13 09:36:00.0,2017-11-13 09:38:00.0]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1510428458926_1679914770",
+      "id": "20171111-192738_2020407898",
+      "dateCreated": "Nov 11, 2017 7:27:38 PM",
+      "dateStarted": "Nov 13, 2017 9:02:18 AM",
+      "dateFinished": "Nov 13, 2017 9:02:33 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql\n",
+      "user": "anonymous",
+      "dateUpdated": "Nov 11, 2017 7:31:56 PM",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1510428716028_2121401836",
+      "id": "20171111-193156_1413859614",
+      "dateCreated": "Nov 11, 2017 7:31:56 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "Structured Spark",
+  "id": "2CK9JKVJW",
+  "angularObjects": {
+    "2CZJSUVN7:shared_process": [],
+    "2CXPB7AV4:shared_process": [],
+    "2CZ9Z2P6E:shared_process": [],
+    "2CZU99T2R:shared_process": [],
+    "2CZJYPC6X:shared_process": [],
+    "2CXCQMT4F:shared_process": [],
+    "2D1SSJNJ9:shared_process": [],
+    "2CX6HM44Q:shared_process": [],
+    "2D1PP21PB:shared_process": [],
+    "2CYWR869R:shared_process": []
+  },
+  "config": {},
+  "info": {}
+}
