@@ -463,20 +463,9 @@
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "Streaming Spark Twitter",
+  "name": "~Trash/Streaming Spark Twitter",
   "id": "2CH5TRFBQ",
-  "angularObjects": {
-    "2CZJSUVN7:shared_process": [],
-    "2CXPB7AV4:shared_process": [],
-    "2CZ9Z2P6E:shared_process": [],
-    "2CZU99T2R:shared_process": [],
-    "2CZJYPC6X:shared_process": [],
-    "2CXCQMT4F:shared_process": [],
-    "2D1SSJNJ9:shared_process": [],
-    "2CX6HM44Q:shared_process": [],
-    "2D1PP21PB:shared_process": [],
-    "2CYWR869R:shared_process": []
-  },
+  "angularObjects": {},
   "config": {},
   "info": {}
 }
